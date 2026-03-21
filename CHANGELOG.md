@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [5.0.0]
+### Added
+- UUIDv7 support. UUIDv4 generation, which was previously just named "UUID", is now clearly named UUID**v4**.
+### Changed
+- Upgraded to latest IntelliJ 2025.3.4 and its new plugin API.
+- Multiple dependency updates and small code refactorings for that.
+
 ## [4.5.1]
 ### Fixed
 - Set proper link to screenshots in plugin description

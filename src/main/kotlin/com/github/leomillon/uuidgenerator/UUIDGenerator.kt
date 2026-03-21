@@ -1,17 +1,31 @@
 package com.github.leomillon.uuidgenerator
 
+import com.github.f4b6a3.uuid.UuidCreator
 import com.github.leomillon.uuidgenerator.settings.uuid.UUIDFormatSettings
 import com.github.leomillon.uuidgenerator.settings.uuid.UUIDGeneratorSettings
 import java.util.*
 
 object UUIDGenerator {
 
-    fun generateUUID() =
-        generateUUID(UUIDGeneratorSettings.instance)
+    fun generateUUIDv4() =
+        generateUUIDv4(UUIDGeneratorSettings.instance)
 
-    fun generateUUID(settings: UUIDGeneratorSettings): String {
+    fun generateUUIDv4(settings: UUIDGeneratorSettings): String {
         return formatUUID(
-            UUID.randomUUID(),
+            /* Use this to explicitly get a UUIDv4. Even when the JDK would switch to UUIDv7,
+             this will still generate a UUIDv4. This method is explicitly named "generateUUID__v4__()",
+             not "generateUUID()". */
+            UuidCreator.getRandomBased(),
+            settings
+        )
+    }
+
+    fun generateUUIDv7() =
+        generateUUIDv7(UUIDGeneratorSettings.instance)
+
+    fun generateUUIDv7(settings: UUIDGeneratorSettings): String {
+        return formatUUID(
+            UuidCreator.getTimeOrderedEpoch(),
             settings
         )
     }

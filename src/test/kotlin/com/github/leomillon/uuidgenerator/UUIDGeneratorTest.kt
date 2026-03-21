@@ -118,7 +118,7 @@ class UUIDGeneratorTest {
         settings: UUIDGeneratorSettings,
         expectedIdRegex: Regex
     ) {
-        assertThat(UUIDGenerator.generateUUID(settings))
+        assertThat(UUIDGenerator.generateUUIDv4(settings))
             .matches(expectedIdRegex)
     }
 }

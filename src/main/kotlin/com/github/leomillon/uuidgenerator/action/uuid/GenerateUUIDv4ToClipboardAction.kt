@@ -4,10 +4,10 @@ import com.github.leomillon.uuidgenerator.UUIDGenerator
 import com.github.leomillon.uuidgenerator.action.GenerateToClipboardAction
 
 /**
- * Action that generate a UUID into clipboard.
+ * Action that generate a UUIDv4 into clipboard.
  *
  * @author Léo Millon
  */
-class GenerateUUIDToClipboardAction : GenerateToClipboardAction() {
-    override fun generateId(): String = UUIDGenerator.generateUUID()
+class GenerateUUIDv4ToClipboardAction : GenerateToClipboardAction() {
+    override fun generateId(): String = UUIDGenerator.generateUUIDv4()
 }

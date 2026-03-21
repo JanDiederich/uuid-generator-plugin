@@ -4,10 +4,11 @@ import assertk.assertThat
 import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotEmpty
+import assertk.assertions.isNotNull
 import com.github.leomillon.uuidgenerator.parser.textRange
+import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.impl.source.tree.injected.changesHandler.range
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.intellij.lang.annotations.Language
 
@@ -56,15 +57,24 @@ class IdPlaceholderAnnotatorTest : BasePlatformTestCase() {
             (485..502) to "Random CUID placeholder labeled 'label_1'"
         )
             .forEach { (range, description) ->
-                assertThat(highlightingResult.find { it.range == range.textRange() }?.description).isEqualTo(description)
+                assertThat(highlightingResult.find {
+                    it.highlighter.textRange == range.textRange()
+                }?.description).isEqualTo(
+                    description
+                )
             }
 
         val placeholdersHighlights = highlightingResult
             .filter { it.description?.startsWith("Random ") ?: false }
             .toList()
         placeholdersHighlights
-            .forEach { result ->
-                assertThat(result.quickFixActionRanges.map { it.first.action.text }.toList())
+            .forEach { result: HighlightInfo ->
+                val quickFixes: List<String> = buildList {
+                    result.findRegisteredQuickFix { desc, _ -> add(desc.action.text); null }
+                }
+                assertThat(quickFixes, "quickFixes (result: ${result})")
+                    .isNotEmpty()
+                assertThat(quickFixes, "quickFixes (result: ${result})")
                     .containsOnly("Replace with new random value")
             }
         assertThat(placeholdersHighlights.count()).isEqualTo(6)

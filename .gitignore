@@ -134,3 +134,6 @@ gradle-app.setting
 
 # jENV
 .java-version
+
+# Qodana cache
+.qodana/

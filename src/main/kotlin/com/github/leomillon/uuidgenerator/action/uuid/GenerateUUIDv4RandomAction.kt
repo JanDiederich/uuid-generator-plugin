@@ -4,10 +4,10 @@ import com.github.leomillon.uuidgenerator.UUIDGenerator
 import com.github.leomillon.uuidgenerator.action.GenerateRandomAction
 
 /**
- * A random UUID generator action.
+ * A random UUIDv4 generator action.
  *
  * @author Léo Millon
  */
-class GenerateUUIDRandomAction : GenerateRandomAction() {
-    override fun generateId(): String = UUIDGenerator.generateUUID()
+class GenerateUUIDv4RandomAction : GenerateRandomAction() {
+    override fun generateId(): String = UUIDGenerator.generateUUIDv4()
 }

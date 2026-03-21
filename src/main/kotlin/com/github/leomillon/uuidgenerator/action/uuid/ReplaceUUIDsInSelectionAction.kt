@@ -9,14 +9,19 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.openapi.editor.SelectionModel
 import com.intellij.openapi.ui.MessageType
 
 /**
- * Replace found UUIDs in selection by new ones action.
+ * Replace found UUIDs in selection by new ones action.<br>
+ * Inheriting classes implement the UUID version specific string generation.
  *
  * @author Léo Millon
  */
-class ReplaceUUIDsInSelectionAction : AnAction() {
+abstract class ReplaceUUIDsInSelectionAction : AnAction() {
+
+    /** Implement this method to generate the UUID version specific replacement string. */
+    abstract fun generateReplacementUUID(): String
 
     override fun actionPerformed(anActionEvent: AnActionEvent) {
         val project = anActionEvent.getData(CommonDataKeys.PROJECT)
@@ -40,7 +45,7 @@ class ReplaceUUIDsInSelectionAction : AnAction() {
                 }
                 .groupBy({ (uuid, _) -> uuid }) { (_, range) -> range }
                 .onEach { (_, ranges) ->
-                    val replacement = UUIDGenerator.generateUUID()
+                    val replacement = generateReplacementUUID()
                     ranges.forEach { range ->
                         EditorDocumentUtils.replaceTextAtRange(
                             editor,

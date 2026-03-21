@@ -1,5 +1,6 @@
 package com.github.leomillon.uuidgenerator.popup.uuid
 
+import com.github.f4b6a3.uuid.UuidCreator
 import com.github.leomillon.uuidgenerator.UUIDGenerator
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
@@ -9,6 +10,8 @@ import javax.swing.*
 class UUIDGeneratorPopupForm {
 
     private var panel: JPanel? = null
+    private var version4RadioButton: JRadioButton? = null
+    private var version7RadioButton: JRadioButton? = null
     private var lowerCaseRadioButton: JRadioButton? = null
     private var upperCaseRadioButton: JRadioButton? = null
     private var withDashesRadioButton: JRadioButton? = null
@@ -30,6 +33,8 @@ class UUIDGeneratorPopupForm {
     }
 
     private fun loadSettings() {
+        version4RadioButton?.isSelected = settings.version4
+        version7RadioButton?.isSelected = !settings.version4
         lowerCaseRadioButton?.isSelected = settings.lowerCased
         upperCaseRadioButton?.isSelected = !settings.lowerCased
         withDashesRadioButton?.isSelected = settings.withDashes
@@ -43,6 +48,8 @@ class UUIDGeneratorPopupForm {
         resultOutputField?.text = ""
 
         sequenceOf(
+            version4RadioButton,
+            version7RadioButton,
             lowerCaseRadioButton,
             upperCaseRadioButton,
             withDashesRadioButton,
@@ -51,7 +58,14 @@ class UUIDGeneratorPopupForm {
             shortSizeRadioButton
         )
             .filterNotNull()
-            .forEach { it.addItemListener { updatePreview() } }
+            .forEach { uiComponent ->
+                uiComponent.addItemListener {
+                    if (uiComponent == version4RadioButton || uiComponent == version7RadioButton) {
+                        updateIds()
+                    }
+                    updatePreview()
+                }
+            }
 
         numberInputField?.addChangeListener {
             updateIds()
@@ -112,7 +126,7 @@ class UUIDGeneratorPopupForm {
         val numberToGenerate = getNumberToGenerate() ?: 1
         return (1..numberToGenerate)
             .asSequence()
-            .map { UUID.randomUUID() }
+            .map { if (isVersion4() ?: true) UuidCreator.getRandomBased() else UuidCreator.getTimeOrderedEpoch() }
             .toList()
     }
 
@@ -129,6 +143,7 @@ class UUIDGeneratorPopupForm {
     }
 
     fun applyToSettings(settings: UUIDGeneratorPopupSettings) {
+        settings.version4 = isVersion4() ?: true
         settings.lowerCased = isLowerCased() ?: true
         settings.withDashes = isWithDashes() ?: true
         settings.longSize = isLongSize() ?: true
@@ -140,6 +155,7 @@ class UUIDGeneratorPopupForm {
 
     fun component(): JComponent? = panel
 
+    private fun isVersion4() = version4RadioButton?.isSelected
     private fun isLowerCased() = lowerCaseRadioButton?.isSelected
     private fun isWithDashes() = withDashesRadioButton?.isSelected
     private fun isLongSize() = longSizeRadioButton?.isSelected

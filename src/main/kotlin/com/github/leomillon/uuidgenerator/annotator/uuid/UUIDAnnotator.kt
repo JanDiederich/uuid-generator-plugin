@@ -3,7 +3,8 @@ package com.github.leomillon.uuidgenerator.annotator.uuid
 import com.github.leomillon.uuidgenerator.parser.UUID_WITH_DASHES_LENGTH
 import com.github.leomillon.uuidgenerator.parser.findUUIDs
 import com.github.leomillon.uuidgenerator.parser.textRange
-import com.github.leomillon.uuidgenerator.quickfix.uuid.UUIDRandomQuickFix
+import com.github.leomillon.uuidgenerator.quickfix.uuid.UUIDv4RandomQuickFix
+import com.github.leomillon.uuidgenerator.quickfix.uuid.UUIDv7RandomQuickFix
 import com.github.leomillon.uuidgenerator.quickfix.uuid.UUIDReformatQuickFix
 import com.github.leomillon.uuidgenerator.quickfix.uuid.UUIDToggleDashesQuickFix
 import com.github.leomillon.uuidgenerator.settings.uuid.UUIDGeneratorSettings
@@ -40,7 +41,8 @@ private fun highlightInText(
         holder.newAnnotation(HighlightSeverity.INFORMATION, "UUID")
             .range(textRange)
             .enforcedTextAttributes(DefaultLanguageHighlighterColors.CONSTANT.defaultAttributes)
-            .withFix(UUIDRandomQuickFix(textRange))
+            .withFix(UUIDv4RandomQuickFix(textRange))
+            .withFix(UUIDv7RandomQuickFix(textRange))
             .withFix(UUIDReformatQuickFix(matchingValue, textRange))
             .withFix(UUIDToggleDashesQuickFix(matchingValue, textRange))
             .create()

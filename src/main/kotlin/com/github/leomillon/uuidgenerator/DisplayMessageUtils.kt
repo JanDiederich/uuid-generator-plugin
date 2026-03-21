@@ -6,18 +6,28 @@ import com.intellij.openapi.ui.popup.Balloon
 import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.openapi.wm.WindowManager
 import com.intellij.ui.awt.RelativePoint
+import java.awt.Point
 
 class DisplayMessageUtils {
 
     companion object {
 
-        fun displayMessage(message: String, project: Project, fadeoutTime: Long = 5000, type: MessageType = MessageType.INFO) {
+        fun displayMessage(
+            message: String,
+            project: Project,
+            fadeoutTime: Long = 5000,
+            type: MessageType = MessageType.INFO
+        ) {
             val statusBar = WindowManager.getInstance().getStatusBar(project)
             JBPopupFactory.getInstance()
                 .createHtmlTextBalloonBuilder(message, type, null)
                 .setFadeoutTime(fadeoutTime)
                 .createBalloon()
-                .show(RelativePoint.getCenterOf(statusBar.component), Balloon.Position.atRight)
+                .show(
+                    statusBar.component?.let { RelativePoint.getCenterOf(it) } ?: RelativePoint(
+                        Point()
+                    ), Balloon.Position.atRight
+                )
         }
     }
 }

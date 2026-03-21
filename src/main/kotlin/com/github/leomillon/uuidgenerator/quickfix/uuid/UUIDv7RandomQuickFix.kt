@@ -10,19 +10,19 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
 
-class UUIDRandomQuickFix(
+class UUIDv7RandomQuickFix(
     private val textRange: TextRange
 ) : BaseIntentionAction(), HighPriorityAction {
 
     override fun getFamilyName(): String = "Random"
 
-    override fun getText(): String = "Replace with new random UUID"
+    override fun getText(): String = "Replace with new random UUIDv7"
 
     override fun isAvailable(project: Project, editor: Editor, file: PsiFile?): Boolean = true
 
     override fun invoke(project: Project, editor: Editor, file: PsiFile?) {
         WriteCommandAction.runWriteCommandAction(project) {
-            EditorDocumentUtils.replaceTextAtRange(editor, textRange, UUIDGenerator.generateUUID())
+            EditorDocumentUtils.replaceTextAtRange(editor, textRange, UUIDGenerator.generateUUIDv7())
         }
     }
 }

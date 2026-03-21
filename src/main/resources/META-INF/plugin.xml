@@ -8,7 +8,7 @@
 
     <change-notes><![CDATA[ Change notes will be added by gradle build]]></change-notes>
 
-    <idea-version since-build="201.6668"/>
+    <idea-version since-build="253"/>
 
     <depends>com.intellij.modules.platform</depends>
 
@@ -72,19 +72,33 @@
                 description="Actions to generate UUIDs"
                 popup="true"
         >
-            <action id="uuidgenerator.random"
-                    class="com.github.leomillon.uuidgenerator.action.uuid.GenerateUUIDRandomAction"
-                    text="Random UUID"
-                    description="Generate a Universally Unique Identifier (UUID)">
+            <action id="uuidgenerator-v4.random"
+                    class="com.github.leomillon.uuidgenerator.action.uuid.GenerateUUIDv4RandomAction"
+                    text="Random UUIDv4"
+                    description="Generate a Universally Unique Identifier Version 4 (UUID)">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift meta alt U"
-                                   second-keystroke="shift meta alt U"/>
+                                   second-keystroke="shift meta alt 4"/>
             </action>
-            <action id="uuidgenerator.to-clipboard"
-                    class="com.github.leomillon.uuidgenerator.action.uuid.GenerateUUIDToClipboardAction"
-                    text="Generate UUID to clipboard"
-                    description="Generate a new UUID to clipboard">
+            <action id="uuidgenerator-v7.random"
+                    class="com.github.leomillon.uuidgenerator.action.uuid.GenerateUUIDv7RandomAction"
+                    text="Random UUIDv7"
+                    description="Generate a Universally Unique Identifier Version 7 (UUID)">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift meta alt U"
-                                   second-keystroke="shift meta alt C"/>
+                                   second-keystroke="shift meta alt 7"/>
+            </action>
+            <action id="uuidgenerator-v4.to-clipboard"
+                    class="com.github.leomillon.uuidgenerator.action.uuid.GenerateUUIDv4ToClipboardAction"
+                    text="Generate UUIDv4 to clipboard"
+                    description="Generate a new UUIDv4 to clipboard">
+                <keyboard-shortcut keymap="$default" first-keystroke="shift meta alt V"
+                                   second-keystroke="shift meta alt 4"/>
+            </action>
+            <action id="uuidgenerator-v7.to-clipboard"
+                    class="com.github.leomillon.uuidgenerator.action.uuid.GenerateUUIDv7ToClipboardAction"
+                    text="Generate UUIDv7 to clipboard"
+                    description="Generate a new UUIDv7 to clipboard">
+                <keyboard-shortcut keymap="$default" first-keystroke="shift meta alt V"
+                                   second-keystroke="shift meta alt 7"/>
             </action>
             <action id="uuidgenerator.on-demand-popup"
                     class="com.github.leomillon.uuidgenerator.action.uuid.GenerateUUIDPopupAction"
@@ -110,10 +124,17 @@
                                second-keystroke="shift meta alt R"/>
         </action>
 
-        <action id="uuidgenerator.replace.selection"
-                class="com.github.leomillon.uuidgenerator.action.uuid.ReplaceUUIDsInSelectionAction"
-                text="Replace Distinct UUIDs in Selection"
-                description="Find and replace existing distinct UUIDs in selection">
+        <action id="uuidgenerator.replace.selectionV4"
+                class="com.github.leomillon.uuidgenerator.action.uuid.ReplaceUuidV4sInSelectionAction"
+                text="Replace Distinct UUIDs in Selection with UUIDv4"
+                description="Find and replace existing distinct UUIDs in selection with UUIDv4">
+            <add-to-group group-id="EditorActions"/>
+        </action>
+
+        <action id="uuidgenerator.replace.selectionV7"
+                class="com.github.leomillon.uuidgenerator.action.uuid.ReplaceUuidV7sInSelectionAction"
+                text="Replace Distinct UUIDs in Selection with UUIDv7"
+                description="Find and replace existing distinct UUIDs in selection with UUIDv7">
             <add-to-group group-id="EditorActions"/>
         </action>
 

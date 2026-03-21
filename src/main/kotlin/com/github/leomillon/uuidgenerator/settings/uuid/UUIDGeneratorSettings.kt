@@ -21,6 +21,7 @@ class UUIDGeneratorSettings : PersistentStateComponent<UUIDGeneratorSettings>,
     /**
      * Default values
      */
+    var uuidVersion4 = true
     var lowerCased = true
     var withDashes = true
     var longSize = true

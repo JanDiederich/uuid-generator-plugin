@@ -20,6 +20,7 @@ class UUIDGeneratorPopupSettings : PersistentStateComponent<UUIDGeneratorPopupSe
     /**
      * Default values
      */
+    var version4 = true
     var lowerCased = true
     var withDashes = true
     var longSize = true

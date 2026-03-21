@@ -14,7 +14,6 @@ import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.json.JsonFileType
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.impl.source.tree.injected.changesHandler.range
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.idea.KotlinFileType
@@ -61,14 +60,14 @@ class IDAnnotatorTest : BasePlatformTestCase() {
             
             /**
              * False positive highlight of CUID #40
-             * https://github.com/leomillon/uuid-generator-plugin/issues/40
+             * <a href="https://github.com/leomillon/uuid-generator-plugin/issues/40">Issue #40</a>
              */
             public static class TicketTriggerHiredFlowAtCalculator {
             }
             
             /**
              * False positive highlight of CUID #40
-             * https://github.com/leomillon/uuid-generator-plugin/issues/40
+             * <a href="https://github.com/leomillon/uuid-generator-plugin/issues/40">Issue #40</a>
              */
             public static class ClassToTestCUIDHighlight1 {
             }
@@ -108,7 +107,7 @@ class IDAnnotatorTest : BasePlatformTestCase() {
         val highlightingResult = myFixture.doHighlighting()
 
         // Then
-        assertThat(highlightingResult).isNotEmpty()
+        assertThat(highlightingResult, "highlightingResult").isNotEmpty()
         assertUUIDHighlight(highlightingResult, 65, 101)
         assertULIDHighlight(highlightingResult, 137, 163)
         assertCUIDHighlight(highlightingResult, 199, 224)
@@ -197,11 +196,17 @@ class IDAnnotatorTest : BasePlatformTestCase() {
         with(highlight!!) {
             assertThat(description).isEqualTo("UUID")
             assertThat(severity).isEqualTo(HighlightSeverity.INFORMATION)
-            assertThat(range.startOffset).isEqualTo(rangeStart)
-            assertThat(range.endOffset).isEqualTo(rangeEnd)
-            assertThat(quickFixActionRanges.map { it.first.action.text }.toList())
+            assertThat(highlighter.textRange.startOffset).isEqualTo(rangeStart)
+            assertThat(highlighter.textRange.endOffset).isEqualTo(rangeEnd)
+
+            val quickFixes: List<String> = buildList {
+                findRegisteredQuickFix { desc, _ -> add(desc.action.text); null }
+            }
+            assertThat(quickFixes, "quickFixes").isNotEmpty()
+            assertThat(quickFixes, "quickFixes")
                 .containsOnly(
-                    "Replace with new random UUID",
+                    "Replace with new random UUIDv4",
+                    "Replace with new random UUIDv7",
                     "Reformat with your UUID settings",
                     "Toggle dashes"
                 )
@@ -214,9 +219,14 @@ class IDAnnotatorTest : BasePlatformTestCase() {
         with(highlight!!) {
             assertThat(description).isEqualTo("ULID Timestamp: 1598457820 ($ulidDateTime)")
             assertThat(severity).isEqualTo(HighlightSeverity.INFORMATION)
-            assertThat(range.startOffset).isEqualTo(rangeStart)
-            assertThat(range.endOffset).isEqualTo(rangeEnd)
-            assertThat(quickFixActionRanges.map { it.first.action.text }.toList())
+            assertThat(highlighter.textRange.startOffset).isEqualTo(rangeStart)
+            assertThat(highlighter.textRange.endOffset).isEqualTo(rangeEnd)
+
+            val quickFixes: List<String> = buildList {
+                findRegisteredQuickFix { desc, _ -> add(desc.action.text); null }
+            }
+            assertThat(quickFixes, "quickFixes").isNotEmpty()
+            assertThat(quickFixes, "quickFixes")
                 .containsOnly(
                     "Replace with new random ULID"
                 )
@@ -228,9 +238,14 @@ class IDAnnotatorTest : BasePlatformTestCase() {
         assertThat(highlight).isNotNull()
         with(highlight!!) {
             assertThat(severity).isEqualTo(HighlightSeverity.INFORMATION)
-            assertThat(range.startOffset).isEqualTo(rangeStart)
-            assertThat(range.endOffset).isEqualTo(rangeEnd)
-            assertThat(quickFixActionRanges.map { it.first.action.text }.toList())
+            assertThat(highlighter.textRange.startOffset).isEqualTo(rangeStart)
+            assertThat(highlighter.textRange.endOffset).isEqualTo(rangeEnd)
+
+            val quickFixes: List<String> = buildList {
+                findRegisteredQuickFix { desc, _ -> add(desc.action.text); null }
+            }
+            assertThat(quickFixes, "quickFixes").isNotEmpty()
+            assertThat(quickFixes, "quickFixes")
                 .containsOnly(
                     "Replace with new random CUID",
                     "Reformat with your CUID settings"

@@ -40,7 +40,7 @@ data class IdPlaceholder(
 )
 
 enum class IdType(val idGenerator: () -> String) {
-    UUID(UUIDGenerator::generateUUID),
+    UUID(UUIDGenerator::generateUUIDv4),
     ULID(ULIDGenerator::generateULID),
     CUID(CUIDGenerator::generateCUID);
 }

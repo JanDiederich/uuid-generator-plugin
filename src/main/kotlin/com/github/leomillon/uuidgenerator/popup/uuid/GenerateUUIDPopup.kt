@@ -9,7 +9,7 @@ class GenerateUUIDPopup : GeneratePopup() {
 
     init {
         init()
-        title = "UUID generator Popup"
+        title = "UUID v4 & v7 generator Popup"
     }
 
     override fun createCenterPanel(): JComponent? {
