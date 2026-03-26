@@ -6,7 +6,9 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.components.service
 import com.intellij.util.xmlb.XmlSerializerUtil
+import kotlinx.datetime.number
 import org.jetbrains.annotations.Nullable
+import java.time.OffsetDateTime
 
 @State(name = "UUIDGeneratorPopupSettings", storages = [(Storage("uuid_popup.xml"))])
 class UUIDGeneratorPopupSettings : PersistentStateComponent<UUIDGeneratorPopupSettings>,
@@ -28,6 +30,15 @@ class UUIDGeneratorPopupSettings : PersistentStateComponent<UUIDGeneratorPopupSe
     var separatorFieldValue = "\\n"
     var prefixFieldValue = ""
     var suffixFieldValue = ""
+
+    var currentTime = true
+    var year: Int = OffsetDateTime.now().year
+    var month: Int = OffsetDateTime.now().month.number
+    var day: Int = OffsetDateTime.now().dayOfMonth
+    var hour: Int = OffsetDateTime.now().hour
+    var minute: Int = OffsetDateTime.now().minute
+    var second: Int = OffsetDateTime.now().second
+    var millis: Int = OffsetDateTime.now().nano / 1_000_000
 
     @Nullable
     override fun getState() = this

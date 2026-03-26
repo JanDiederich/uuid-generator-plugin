@@ -18,6 +18,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.idea.KotlinFileType
 import java.time.ZoneId
+import java.util.TimeZone
 
 private const val targetUUIDv4 = "037d596f-0740-48d5-a5ec-8b4948f9e561"
 private const val targetUUIDv7 = "019d2220-935d-7342-af16-026657bc1f29"
@@ -77,6 +78,10 @@ class IDAnnotatorTest : BasePlatformTestCase() {
         """.trimIndent()
         myFixture.configureByText(JavaFileType.INSTANCE, code)
         PsiDocumentManager.getInstance(project).commitAllDocuments()
+
+        /* Set a timezone for the UUIDv7 localized time string
+        - to make the test run everywhere, regardless of the test-systems set timezone. */
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Berlin"))
 
         // When
         val highlightingResult = myFixture.doHighlighting()
@@ -210,7 +215,7 @@ class IDAnnotatorTest : BasePlatformTestCase() {
             rangeStart,
             rangeEnd,
             targetUUIDv7,
-            "UUIDv7 Timestamp: 2026-03-25T00:14:13.469+01:00[Europe/Berlin]"
+            "UUIDv7 Timestamp: 2026-03-25 00:14:13.469 +01:00 [Europe/Berlin]"
         )
     }
 

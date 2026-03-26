@@ -19,7 +19,21 @@ class IdPlaceholderParserTest {
         "#gen.uuid#" to listOf(
             IdPlaceholder(
                 rawValue = "#gen.uuid#",
-                idType = IdType.UUID,
+                idType = IdType.UUIDv4,
+                label = null
+            ) to 0..9
+        ),
+        "#gen.uuidv4#" to listOf(
+            IdPlaceholder(
+                rawValue = "#gen.uuidv4#",
+                idType = IdType.UUIDv4,
+                label = null
+            ) to 0..9
+        ),
+        "#gen.uuidv7#" to listOf(
+            IdPlaceholder(
+                rawValue = "#gen.uuidv7#",
+                idType = IdType.UUIDv7,
                 label = null
             ) to 0..9
         ),
@@ -37,29 +51,54 @@ class IdPlaceholderParserTest {
                 label = null
             ) to 0..9
         ),
-        "Hello you! #gen.uuid#, #gen.ulid#, #gen.cuid# Bye bye!" to listOf(
+
+        "Hello you! #gen.uuid#, #gen.uuidv4#, #gen.uuidv7#, #gen.ulid#, #gen.cuid# Bye bye!" to listOf(
             IdPlaceholder(
                 rawValue = "#gen.uuid#",
-                idType = IdType.UUID,
+                idType = IdType.UUIDv4,
                 label = null
             ) to 11..20,
+            IdPlaceholder(
+                rawValue = "#gen.uuidv4#",
+                idType = IdType.UUIDv4,
+                label = null
+            ) to 23..34,
+            IdPlaceholder(
+                rawValue = "#gen.uuidv7#",
+                idType = IdType.UUIDv7,
+                label = null
+            ) to 37..48,
             IdPlaceholder(
                 rawValue = "#gen.ulid#",
                 idType = IdType.ULID,
                 label = null
-            ) to 23..32,
+            ) to 60..69,
             IdPlaceholder(
                 rawValue = "#gen.cuid#",
                 idType = IdType.CUID,
                 label = null
-            ) to 35..44
+            ) to 72..81
         ),
         "#gen.uuid.label_1-bis#" to listOf(
             IdPlaceholder(
                 rawValue = "#gen.uuid.label_1-bis#",
-                idType = IdType.UUID,
+                idType = IdType.UUIDv4,
                 label = "label_1-bis"
             ) to 0..21
+        ),
+        "#gen.uuidv4.label_1-bis#" to listOf(
+            IdPlaceholder(
+                rawValue = "#gen.uuidv4.label_1-bis#",
+                idType = IdType.UUIDv4,
+                label = "label_1-bis"
+            ) to 0..23
+        ),
+        "#gen.uuidv7.label_1-bis#" to listOf(
+            IdPlaceholder(
+                rawValue = "#gen.uuidv7.label_1-bis#",
+                idType = IdType.UUIDv7,
+                label = "label_1-bis"
+            ) to 0..23
         ),
         "#gen.ulid.label_1-bis#" to listOf(
             IdPlaceholder(
@@ -79,6 +118,8 @@ class IdPlaceholderParserTest {
         "#gen.unknown#" to emptyList(),
         "#gen.uuid.invalid label#" to emptyList(),
         "#gen.uuid.invalid.label#" to emptyList(),
+        "#gen.uuidv4.invalid.label#" to emptyList(),
+        "#gen.uuidv7.invalid.label#" to emptyList(),
         "#gen.ulid.invalid label#" to emptyList(),
         "#gen.ulid.invalid.label#" to emptyList(),
         "#gen.cuid.invalid label#" to emptyList(),

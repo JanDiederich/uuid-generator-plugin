@@ -7,7 +7,7 @@ import com.github.leomillon.uuidgenerator.UUIDGenerator
 private const val ID_TYPE_GROUP_NAME = "idType"
 private const val LABEL_GROUP_NAME = "label"
 private val PLACEHOLDER_GLOBAL_REGEX =
-    "#gen\\.(?<$ID_TYPE_GROUP_NAME>uuid|ulid|cuid)(\\.(?<$LABEL_GROUP_NAME>[a-zA-Z0-9_-]+?))?#".toRegex()
+    "#gen\\.(?<$ID_TYPE_GROUP_NAME>uuid|uuidv4|uuidv7|ulid|cuid)(\\.(?<$LABEL_GROUP_NAME>[a-zA-Z0-9_-]+?))?#".toRegex()
 
 fun CharSequence.findIdPlaceholders() = PLACEHOLDER_GLOBAL_REGEX.findAll(this)
     .map { matchResult ->
@@ -15,7 +15,9 @@ fun CharSequence.findIdPlaceholders() = PLACEHOLDER_GLOBAL_REGEX.findAll(this)
             ?.value
             ?.let {
                 when (it) {
-                    "uuid" -> IdType.UUID
+                    "uuid" -> IdType.UUIDv4
+                    "uuidv4" -> IdType.UUIDv4
+                    "uuidv7" -> IdType.UUIDv7
                     "ulid" -> IdType.ULID
                     "cuid" -> IdType.CUID
                     else -> null
@@ -40,7 +42,8 @@ data class IdPlaceholder(
 )
 
 enum class IdType(val idGenerator: () -> String) {
-    UUID(UUIDGenerator::generateUUIDv4),
+    UUIDv4(UUIDGenerator::generateUUIDv4),
+    UUIDv7(UUIDGenerator::generateUUIDv7),
     ULID(ULIDGenerator::generateULID),
     CUID(CUIDGenerator::generateCUID);
 }
