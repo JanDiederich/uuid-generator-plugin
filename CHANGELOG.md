@@ -6,7 +6,7 @@
 ### Added
 - UUIDv7 support. UUIDv4 generation, which was previously just named "UUID", is now clearly named UUID**v4**.
 ### Changed
-- Upgraded to latest IntelliJ 2025.3.4 and its new plugin API.
+- Upgraded to latest IntelliJ 2026.1 and its new plugin API.
 - Multiple dependency updates and small code refactorings for that.
 
 ## [4.5.1]

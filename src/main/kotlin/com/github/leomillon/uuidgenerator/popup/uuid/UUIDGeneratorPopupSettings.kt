@@ -31,7 +31,8 @@ class UUIDGeneratorPopupSettings : PersistentStateComponent<UUIDGeneratorPopupSe
     var prefixFieldValue = ""
     var suffixFieldValue = ""
 
-    var currentTime = true
+    /** Is the current time used as base for UUIDv7 or a fixed time. */
+    var fixedTime = true
     var year: Int = OffsetDateTime.now().year
     var month: Int = OffsetDateTime.now().month.number
     var day: Int = OffsetDateTime.now().dayOfMonth

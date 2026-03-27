@@ -24,8 +24,14 @@ object UUIDGenerator {
         generateUUIDv7(UUIDGeneratorSettings.instance)
 
     fun generateUUIDv7(settings: UUIDGeneratorSettings): String {
+        val time: UUID
+        if (settings.fixedTime) {
+            time = settings.timeFieldsToUuidv7()
+        } else {
+            time = UuidCreator.getTimeOrderedEpoch()
+        }
         return formatUUID(
-            UuidCreator.getTimeOrderedEpoch(),
+            time,
             settings
         )
     }

@@ -6,6 +6,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotEmpty
 import assertk.assertions.isNotNull
 import com.github.f4b6a3.ulid.Ulid
+import com.github.leomillon.uuidgenerator.parser.IdType
 import com.github.leomillon.uuidgenerator.settings.cuid.CUIDGeneratorSettings
 import com.github.leomillon.uuidgenerator.settings.ulid.ULIDGeneratorSettings
 import com.github.leomillon.uuidgenerator.settings.uuid.UUIDGeneratorSettings
@@ -18,7 +19,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.idea.KotlinFileType
 import java.time.ZoneId
-import java.util.TimeZone
+import java.util.*
 
 private const val targetUUIDv4 = "037d596f-0740-48d5-a5ec-8b4948f9e561"
 private const val targetUUIDv7 = "019d2220-935d-7342-af16-026657bc1f29"
@@ -206,11 +207,12 @@ class IDAnnotatorTest : BasePlatformTestCase() {
     }
 
     private fun assertUUIDv4Highlight(highlightingResult: List<HighlightInfo>, rangeStart: Int, rangeEnd: Int) {
-        assertUUIDHighlight(highlightingResult, rangeStart, rangeEnd, targetUUIDv4, "UUIDv4")
+        assertUUIDHighlight(IdType.UUIDv4, highlightingResult, rangeStart, rangeEnd, targetUUIDv4, "UUIDv4")
     }
 
     private fun assertUUIDv7Highlight(highlightingResult: List<HighlightInfo>, rangeStart: Int, rangeEnd: Int) {
         assertUUIDHighlight(
+            IdType.UUIDv7,
             highlightingResult,
             rangeStart,
             rangeEnd,
@@ -220,6 +222,7 @@ class IDAnnotatorTest : BasePlatformTestCase() {
     }
 
     private fun assertUUIDHighlight(
+        idType: IdType,
         highlightingResult: List<HighlightInfo>,
         rangeStart: Int,
         rangeEnd: Int,
@@ -238,13 +241,25 @@ class IDAnnotatorTest : BasePlatformTestCase() {
                 findRegisteredQuickFix { desc, _ -> add(desc.action.text); null }
             }
             assertThat(quickFixes, "quickFixes").isNotEmpty()
-            assertThat(quickFixes, "quickFixes")
-                .containsOnly(
-                    "Replace with new random UUIDv4",
-                    "Replace with new random UUIDv7",
-                    "Reformat with your UUID settings",
-                    "Toggle dashes"
-                )
+            if (idType == IdType.UUIDv4) {
+                assertThat(quickFixes, "quickFixes")
+                    .containsOnly(
+                        "Replace with new random UUIDv4",
+                        "Replace with new random UUIDv7",
+                        "Reformat with your UUID settings",
+                        "Toggle dashes"
+                    )
+            } else {
+                assertThat(quickFixes, "quickFixes")
+                    .containsOnly(
+                        "Replace with new random UUIDv7",
+                        "Replace with new random UUIDv4",
+                        "Copy UUIDv7 formatted timestamp to clipboard",
+                        "Copy UUIDv7 timestamp epoch milliseconds to clipboard",
+                        "Reformat with your UUID settings",
+                        "Toggle dashes"
+                    )
+            }
         }
     }
 

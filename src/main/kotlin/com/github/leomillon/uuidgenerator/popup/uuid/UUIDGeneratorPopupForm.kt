@@ -2,45 +2,42 @@ package com.github.leomillon.uuidgenerator.popup.uuid
 
 import com.github.f4b6a3.uuid.UuidCreator
 import com.github.leomillon.uuidgenerator.UUIDGenerator
-import kotlinx.datetime.number
-import java.awt.Component
+import com.github.leomillon.uuidgenerator.settings.UUIDGeneratorBaseForm
 import java.awt.ItemSelectable
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
 import java.util.*
 import javax.swing.*
 
+class UUIDGeneratorPopupForm : UUIDGeneratorBaseForm {
 
-class UUIDGeneratorPopupForm {
+    override var panel: JPanel? = null
 
-    private var panel: JPanel? = null
-    private var version4RadioButton: JRadioButton? = null
-    private var version7RadioButton: JRadioButton? = null
-    private var lowerCaseRadioButton: JRadioButton? = null
-    private var upperCaseRadioButton: JRadioButton? = null
-    private var withDashesRadioButton: JRadioButton? = null
-    private var withoutDashesRadioButton: JRadioButton? = null
-    private var longSizeRadioButton: JRadioButton? = null
-    private var shortSizeRadioButton: JRadioButton? = null
+    override var uuidV4RadioButton: JRadioButton? = null
+    override var uuidV7RadioButton: JRadioButton? = null
+    override var lowerCaseRadioButton: JRadioButton? = null
+    override var upperCaseRadioButton: JRadioButton? = null
+    override var withDashesRadioButton: JRadioButton? = null
+    override var withoutDashesRadioButton: JRadioButton? = null
+    override var longSizeRadioButton: JRadioButton? = null
+    override var shortSizeRadioButton: JRadioButton? = null
+
+    override var currentTimeRadioButton: JRadioButton? = null
+    override var fixedTimeRadioButton: JRadioButton? = null
+    override var timePanel: JPanel? = null
+    override var yearSpinner: JSpinner? = null
+    override var monthSpinner: JSpinner? = null
+    override var daySpinner: JSpinner? = null
+    override var hourSpinner: JSpinner? = null
+    override var minuteSpinner: JSpinner? = null
+    override var secondSpinner: JSpinner? = null
+    override var millisSpinner: JSpinner? = null
+
     private var numberInputField: JSpinner? = null
     private var separatorInputField: JTextField? = null
     private var prefixInputField: JTextField? = null
     private var suffixInputField: JTextField? = null
     private var resultOutputField: JTextArea? = null
-
-    private var currentTimeRadioButton: JRadioButton? = null
-    private var fixedTimeRadioButton: JRadioButton? = null
-    private var timePanel: JPanel? = null
-    private var yearSpinner: JSpinner? = null
-    private var monthSpinner: JSpinner? = null
-    private var daySpinner: JSpinner? = null
-    private var hourSpinner: JSpinner? = null
-    private var minuteSpinner: JSpinner? = null
-    private var secondSpinner: JSpinner? = null
-    private var millisSpinner: JSpinner? = null
 
     private var currentIds = listOf<UUID>()
 
@@ -51,8 +48,8 @@ class UUIDGeneratorPopupForm {
     }
 
     private fun loadSettings() {
-        version4RadioButton?.isSelected = settings.version4
-        version7RadioButton?.isSelected = !settings.version4
+        uuidV4RadioButton?.isSelected = settings.version4
+        uuidV7RadioButton?.isSelected = !settings.version4
         lowerCaseRadioButton?.isSelected = settings.lowerCased
         upperCaseRadioButton?.isSelected = !settings.lowerCased
         withDashesRadioButton?.isSelected = settings.withDashes
@@ -65,10 +62,10 @@ class UUIDGeneratorPopupForm {
         suffixInputField?.text = settings.suffixFieldValue
         resultOutputField?.text = ""
 
-        currentTimeRadioButton?.isSelected = settings.currentTime
-        fixedTimeRadioButton?.isSelected = !settings.currentTime
+        currentTimeRadioButton?.isSelected = !settings.fixedTime
+        fixedTimeRadioButton?.isSelected = settings.fixedTime
 
-        setPanelEnabled(timePanel, !settings.currentTime)
+        setPanelEnabled(timePanel, settings.fixedTime && !settings.version4)
 
         yearSpinner?.value = settings.year
         monthSpinner?.value = settings.month
@@ -79,8 +76,8 @@ class UUIDGeneratorPopupForm {
         millisSpinner?.value = settings.millis
 
         sequenceOf<ItemSelectable?>(
-            version4RadioButton,
-            version7RadioButton,
+            uuidV4RadioButton,
+            uuidV7RadioButton,
             lowerCaseRadioButton,
             upperCaseRadioButton,
             withDashesRadioButton,
@@ -93,16 +90,9 @@ class UUIDGeneratorPopupForm {
             .filterNotNull()
             .forEach { uiComponent: ItemSelectable? ->
                 uiComponent?.addItemListener {
-                    if (uiComponent == currentTimeRadioButton
-                        || uiComponent == fixedTimeRadioButton
+                    if (isUuid7TimeComponent(uiComponent)
                     ) {
-                        setPanelEnabled(timePanel, isFixedTime())
-                    }
-                    if (uiComponent == version4RadioButton
-                        || uiComponent == version7RadioButton
-                        || uiComponent == currentTimeRadioButton
-                        || uiComponent == fixedTimeRadioButton
-                    ) {
+                        setPanelEnabled(timePanel, isFixedTime() && isUuidVersion7())
                         updateIds()
                     }
                     updatePreview()
@@ -196,13 +186,7 @@ class UUIDGeneratorPopupForm {
             UuidCreator.getRandomBased()
         } else {
             if (isFixedTime()) {
-                UuidCreator.getTimeOrderedEpoch(
-                    OffsetDateTime.of(
-                        year(), month(), dayOfMonth(),
-                        hour(), minute(), second(), millis() * 1_000_000,
-                        ZoneOffset.systemDefault().rules.getOffset(LocalDateTime.now())
-                    ).toInstant()
-                )
+                timeFieldsToUuidv7()
             } else {
                 UuidCreator.getTimeOrderedEpoch()
             }
@@ -230,6 +214,7 @@ class UUIDGeneratorPopupForm {
         settings.separatorFieldValue = separatorInputField?.text ?: ""
         settings.prefixFieldValue = prefixInputField?.text ?: ""
         settings.suffixFieldValue = suffixInputField?.text ?: ""
+        settings.fixedTime = isFixedTime()
 
         settings.year = year()
         settings.month = month()
@@ -240,43 +225,5 @@ class UUIDGeneratorPopupForm {
         settings.millis = millis()
     }
 
-    private fun isFixedTime(): Boolean = fixedTimeRadioButton?.isSelected ?: false
-    private fun year(): Int = (yearSpinner?.value ?: OffsetDateTime.now().year) as Int
-    private fun month(): Int = (monthSpinner?.value ?: OffsetDateTime.now().month) as Int
-    private fun dayOfMonth(): Int = (daySpinner?.value ?: OffsetDateTime.now().dayOfMonth) as Int
-    private fun hour(): Int = (hourSpinner?.value ?: OffsetDateTime.now().hour) as Int
-    private fun minute(): Int = (minuteSpinner?.value ?: OffsetDateTime.now().minute) as Int
-    private fun second(): Int = (secondSpinner?.value ?: OffsetDateTime.now().second) as Int
-    private fun millis(): Int = (millisSpinner?.value ?: (OffsetDateTime.now().nano / 1_000_000)) as Int
-
     fun component(): JComponent? = panel
-
-    private fun isVersion4() = version4RadioButton?.isSelected
-    private fun isVersion7() = version7RadioButton?.isSelected
-    private fun isLowerCased() = lowerCaseRadioButton?.isSelected
-    private fun isWithDashes() = withDashesRadioButton?.isSelected
-    private fun isLongSize() = longSizeRadioButton?.isSelected
-
-    fun setPanelEnabled(panel: JPanel?, isEnabled: Boolean) {
-        if (panel == null) return;
-        panel.setEnabled(isEnabled)
-        val components: Array<Component> = panel.components
-        for (component in components) {
-            if (component is JPanel) {
-                setPanelEnabled((component as JPanel?), isEnabled)
-            }
-            component.isEnabled = isEnabled
-        }
-    }
-
-    // Called by the IntelliJ Swing designer.
-    fun createUIComponents() {
-        yearSpinner = JSpinner(SpinnerNumberModel(OffsetDateTime.now().year, -9999, 9999, 1))
-        monthSpinner = JSpinner(SpinnerNumberModel(OffsetDateTime.now().month.number, 1, 12, 1))
-        daySpinner = JSpinner(SpinnerNumberModel(OffsetDateTime.now().dayOfMonth, 1, 31, 1))
-        hourSpinner = JSpinner(SpinnerNumberModel(OffsetDateTime.now().hour, 0, 23, 1))
-        minuteSpinner = JSpinner(SpinnerNumberModel(OffsetDateTime.now().minute, 0, 59, 1))
-        secondSpinner = JSpinner(SpinnerNumberModel(OffsetDateTime.now().second, 0, 59, 1))
-        millisSpinner = JSpinner(SpinnerNumberModel(OffsetDateTime.now().nano / 1_000_000, 0, 999, 1))
-    }
 }
