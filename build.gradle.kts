@@ -207,13 +207,11 @@ tasks {
         withType<KotlinCompile> {
             compilerOptions {
                 jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(it))
-                // apiVersion must match the Kotlin stdlib version bundled in the oldest target IDE.
-                // sequenceOf(T) (non-vararg single-element overload) was added in Kotlin 2.1.20,
-                // so setting apiVersion to KOTLIN_2_1 prevents the compiler from emitting calls to
-                // that method and avoids NoSuchMethodError at runtime on IDEs with an older stdlib.
-                apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_1)
+                /* Enforce a current Kotlin version so older plugins / dependencies don't trigger
+                errors when using older Kotlin versions. */
+                apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_3)
                 // languageVersion controls which Kotlin language features are available.
-                languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_1)
+                languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_3)
             }
         }
     }
