@@ -90,8 +90,7 @@ class UUIDGeneratorPopupForm : UUIDGeneratorBaseForm {
             .filterNotNull()
             .forEach { uiComponent: ItemSelectable? ->
                 uiComponent?.addItemListener {
-                    if (isUuid7TimeComponent(uiComponent)
-                    ) {
+                    if (isUuid7TimeComponent(uiComponent)) {
                         setPanelEnabled(timePanel, isFixedTime() && isUuidVersion7())
                         updateIds()
                     }

@@ -10,7 +10,6 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import java.time.ZoneId
@@ -46,11 +45,10 @@ private fun highlightInText(
             }
             else -> "ULID"
         }
-        val newRange = TextRange(0, textRange.length)
         holder.newAnnotation(HighlightSeverity.INFORMATION, message)
             .range(textRange)
             .enforcedTextAttributes(DefaultLanguageHighlighterColors.CONSTANT.defaultAttributes)
-            .withFix(ULIDRandomQuickFix(newRange))
+            .withFix(ULIDRandomQuickFix(textRange))
             .create()
     }
 }

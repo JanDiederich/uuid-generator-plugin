@@ -6,10 +6,10 @@ import com.github.f4b6a3.uuid.util.UuidUtil
 import com.github.leomillon.uuidgenerator.parser.UUID_WITH_DASHES_LENGTH
 import com.github.leomillon.uuidgenerator.parser.findUUIDs
 import com.github.leomillon.uuidgenerator.parser.textRange
+import com.github.leomillon.uuidgenerator.quickfix.CopyStringToClipboardQuickFix
 import com.github.leomillon.uuidgenerator.quickfix.uuid.UUIDReformatQuickFix
 import com.github.leomillon.uuidgenerator.quickfix.uuid.UUIDToggleDashesQuickFix
 import com.github.leomillon.uuidgenerator.quickfix.uuid.UUIDv4RandomQuickFix
-import com.github.leomillon.uuidgenerator.quickfix.CopyStringToClipboardQuickFix
 import com.github.leomillon.uuidgenerator.quickfix.uuid.UUIDv7RandomQuickFix
 import com.github.leomillon.uuidgenerator.settings.uuid.UUIDGeneratorSettings
 import com.intellij.lang.annotation.AnnotationBuilder
@@ -17,7 +17,6 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import java.time.ZoneId

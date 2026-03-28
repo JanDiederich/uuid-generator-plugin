@@ -10,7 +10,6 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 
@@ -37,12 +36,11 @@ private fun highlightInText(
     val startOffset = element.textRange.startOffset
     rawText.findCUIDs().forEach { (matchingValue, range) ->
         val textRange = range.textRange(startOffset)
-        val newRange = TextRange(0, textRange.length)
         holder.newAnnotation(HighlightSeverity.INFORMATION, "CUID")
             .range(textRange)
             .enforcedTextAttributes(DefaultLanguageHighlighterColors.CONSTANT.defaultAttributes)
-            .withFix(CUIDRandomQuickFix(newRange))
-            .withFix(CUIDReformatQuickFix(matchingValue, newRange))
+            .withFix(CUIDRandomQuickFix(textRange))
+            .withFix(CUIDReformatQuickFix(matchingValue, textRange))
             .create()
     }
 }
