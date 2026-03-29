@@ -1,10 +1,21 @@
 <div align="center">
     <a href="https://plugins.jetbrains.com/plugin/8320-uuid-generator">
-        <img src="./src/main/resources/META-INF/pluginIcon.svg" width="320" height="320" alt="logo"></img>
+        <img src="./src/main/resources/META-INF/pluginIcon.svg" width="320" height="320" alt="logo"/>
     </a>
 </div>
 <h1 align="center">Intellij UUID Generator</h1>
-<p align="center"><a href="https://tools.ietf.org/html/rfc4122">UUID</a>, <a href="https://github.com/ulid/spec">ULID</a> and <a href="https://github.com/ericelliott/cuid">CUID</a> generator plugin for IntelliJ based IDEs.</p>
+<ul>
+    <li>UUID
+      <ul>
+        <li>Version 4 <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)">Wiki</a>,
+            <a href="https://tools.ietf.org/html/rfc4122">RFC</a></li>
+        <li>Version 7 <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_7_(timestamp_and_random)">Wiki</a></li>
+      </ul>
+    </li>
+    <li>ULID <a href="https://github.com/ulid/spec">ULID</a></li>
+    <li>CUID <a href="https://github.com/ericelliott/cuid">CUID</a></li>
+</ul>
+generator plugin for IntelliJ based IDEs.</p>
 
 <p align="center">
     <a href="https://github.com/leomillon/uuid-generator-plugin/actions?query=workflow%3A%22Build+branch%22+branch%3Amaster"><img src="https://github.com/leomillon/uuid-generator-plugin/workflows/Build%20branch/badge.svg?branch=master"></a>
@@ -22,23 +33,27 @@ Link to the official plugin page : [UUID Generator](https://plugins.jetbrains.co
 ## Description
 
 <!-- Plugin description -->
-[UUID](https://tools.ietf.org/html/rfc4122), [ULID](https://github.com/ulid/spec) and [CUID](https://github.com/ericelliott/cuid) generator plugin for IntelliJ based IDEs..
+UUID [Version 4](https://tools.ietf.org/html/rfc4122),
+[Version 7](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_7_(timestamp_and_random));
+[ULID](https://github.com/ulid/spec)
+and [CUID](https://github.com/ericelliott/cuid) generator plugin for IntelliJ based IDEs.
 
 For example : `123e4567-e89b-12d3-a456-426655440000`.
-
-You will find it in the **Generate popup** -> **Random UUID**.
+    
+You will find it in the **Generate popup** -> **Random UUIDv4**.
 
 ## Available actions
 
-- Random `UUID` / `ULID` / `CUID` (also as quick fix)
-- Generate `UUID` / `ULID` / `CUID` to clipboard
-- Generate `UUID` / `ULID` / `CUID` Popup
+- Random `UUIDv4` / `UUIDv7` / `ULID` / `CUID` (also as quick fix)
+- Generate `UUIDv4` / `UUIDv7` / `ULID` / `CUID` to clipboard
+- Generate `UUIDv4` / `UUIDv7` / `ULID` / `CUID` Popup
 - Toggle `UUID` dashes (also as quick fix)
 - Reformat `UUID` / `CUID` with settings (also as quick fix)
 - Replace Distinct `UUID`s in Selection
 - Replace Random `UUID` / `ULID` / `CUID` Placeholders in Selection
 
-`UUID`/`ULID`/`CUID` highlight in any language with context info (Timestamp extraction for `ULID`) and quick fix suggestions
+`UUID`/`ULID`/`CUID` highlight in any language with context info (Timestamp extraction for `UUIDv7` and `ULID`) and
+quick fix suggestions
 
 ## Demo
 
@@ -50,7 +65,7 @@ You will find it in the **Generate popup** -> **Random UUID**.
 
 ![UUID / ULID / CUID quick fixes](./screenshots/uuid_quick_fixes.png)
 
-- Random `UUID`
+- Random `UUIDv4` / `UUIDv7` generation
 
 ![Random UUID](./screenshots/generate_random_uuid.png)
 
@@ -80,11 +95,12 @@ You will find it in the **Generate popup** -> **Random UUID**.
 
 - ID placeholders replacement action
 
-![ID placeholders replacement action](./screenshots/id_placeholders_replacement.gif)
+![ID placeholders replacement action](./screenshots/id_placeholders_replacement.apng)
 
 ## Contributors
 
 Special thanks to:
 
 - [Davide Maggio (DVDAndroid)](https://plugins.jetbrains.com/author/683c57fa-d7ec-4d24-ae4d-82442d3aa75a)
+
 <!-- Plugin description end -->
