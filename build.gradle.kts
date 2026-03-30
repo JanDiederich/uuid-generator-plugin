@@ -40,10 +40,10 @@ repositories {
 dependencies {
     implementation("com.github.f4b6a3:ulid-creator:5.2.4")
     // Support UUIDv7
-    implementation("com.github.f4b6a3:uuid-creator:6.1.0")
+    implementation("com.github.f4b6a3:uuid-creator:6.1.1")
     implementation("cool.graph:cuid-java:0.1.1")
 
-    testImplementation(platform("org.junit:junit-bom:5.7.2"))
+    testImplementation(platform("org.junit:junit-bom:${properties("junit.version")}"))
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.junit.jupiter:junit-jupiter")
 
