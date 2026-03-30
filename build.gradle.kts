@@ -1,3 +1,4 @@
+import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.Constants
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
@@ -48,32 +49,21 @@ dependencies {
 
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:${properties("assertk-jvm.version")}")
 
-    /*
-    IntelliJ Platform 2025.3+ bundles classes compiled against kotlin-stdlib >= 2.1.20
-    (which introduced the non-vararg sequenceOf(T) overload). assertk-jvm pulls in an
-    older kotlin-stdlib transitively, causing NoSuchMethodError at test runtime.
-    Adding kotlin-stdlib explicitly makes Gradle pick the higher version (matching the
-    Kotlin compiler plugin) and resolves the conflict.
-    */
+    // Needed for compatibility with test dependencies.
     testImplementation(kotlin("stdlib"))
 
     // https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
         create(properties("platformType"), properties("platformVersion"))
 
-        bundledPlugin("com.intellij.modules.json")
-        testFramework(TestFrameworkType.Platform)
-
         // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
         bundledPlugins(
-            properties("platformPlugins")
-                .split(',')
-                .map(String::trim)
-                .filter(String::isNotEmpty)
-                .toList()
+            properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty).toList()
         )
 
         pluginVerifier()
+        zipSigner()
+        testFramework(TestFrameworkType.Platform)
     }
 }
 
@@ -84,18 +74,16 @@ intellijPlatform {
         version = properties("pluginVersion")
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-        description = providers.fileContents(layout.projectDirectory.file("README.md")).asText.map {
+        description = providers.fileContents(layout.projectDirectory.file("README.md")).asText.map { fileContent ->
             val start = "<!-- Plugin description -->"
             val end = "<!-- Plugin description end -->"
 
-            with(it.lines()) {
+            with(fileContent.lines()) {
                 if (!containsAll(listOf(start, end))) {
                     throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
                 }
-                subList(indexOf(start) + 1, indexOf(end))
-                    .joinToString("\n").let(::markdownToHTML)
-            }
-            .let {
+                subList(indexOf(start) + 1, indexOf(end)).joinToString("\n").let(::markdownToHTML)
+            }.let {
                 val pluginVersion = properties("pluginVersion")
                 val gitHubContentBasePath = "https://raw.githubusercontent.com/leomillon/uuid-generator-plugin"
                 val gitHubRef = when {
@@ -104,8 +92,7 @@ intellijPlatform {
                 }
                 // Replace local url with GitHub base url and set width to 500px
                 it.replace(
-                    """src="./""",
-                    """width="500" src="$gitHubContentBasePath/$gitHubRef/"""
+                    """src="./""", """width="500" src="$gitHubContentBasePath/$gitHubRef/"""
                 )
             }
         }
@@ -115,8 +102,9 @@ intellijPlatform {
         changeNotes = providers.provider { version }.map { pluginVersion ->
             with(changelog) {
                 renderItem(
-                    changelog.getOrNull(properties("pluginVersion")) ?: changelog.getLatest(),
-                    org.jetbrains.changelog.Changelog.OutputType.HTML
+                    (getOrNull(properties("pluginVersion")) ?: getUnreleased()).withHeader(false)
+                        .withEmptySections(false),
+                    Changelog.OutputType.HTML,
                 )
             }
         }
@@ -139,34 +127,33 @@ intellijPlatform {
 
         fun getFailureLevels(): EnumSet<VerifyPluginTask.FailureLevel> {
             val includeFailureLevels = EnumSet.allOf(VerifyPluginTask.FailureLevel::class.java)
-            val desiredFailureLevels =
-                pluginVerifierExcludeFailureLevels.split(",").map(String::trim)
-                    .filter(String::isNotEmpty) // Remove empty strings; this happens when user sets nothing (ie, `pluginVerifierExcludeFailureLevels =`)
-
-            desiredFailureLevels.forEach { failureLevel ->
-                when (failureLevel) {
-                    "ALL" -> return EnumSet.allOf(VerifyPluginTask.FailureLevel::class.java)
-                    "NONE" -> return EnumSet.noneOf(VerifyPluginTask.FailureLevel::class.java)
-                    else -> {
-                        try {
-                            val enumFailureLevel = VerifyPluginTask.FailureLevel.valueOf(failureLevel)
-                            includeFailureLevels.remove(enumFailureLevel)
-                        } catch (ignored: Exception) {
-                            val msg = "Failure Level \"$failureLevel\" is *NOT* valid. Please select from: ${
-                                EnumSet.allOf(VerifyPluginTask.FailureLevel::class.java)
-                            }."
-                            logger.error(msg)
-                            throw Exception(msg)
+            val desiredFailureLevels = pluginVerifierExcludeFailureLevels.split(",").map(String::trim)
+                // Remove empty strings; this happens when user sets nothing (ie, `pluginVerifierExcludeFailureLevels =`)
+                .filter { it.isNotBlank() && it != "null" }
+                .forEach { failureLevel ->
+                    when (failureLevel) {
+                        "ALL" -> return EnumSet.allOf(VerifyPluginTask.FailureLevel::class.java)
+                        "NONE" -> return EnumSet.noneOf(VerifyPluginTask.FailureLevel::class.java)
+                        else -> {
+                            try {
+                                val enumFailureLevel = VerifyPluginTask.FailureLevel.valueOf(failureLevel)
+                                includeFailureLevels.remove(enumFailureLevel)
+                            } catch (ignored: Exception) {
+                                val msg = "Failure Level \"$failureLevel\" is *NOT* valid. Please select from: ${
+                                    EnumSet.allOf(VerifyPluginTask.FailureLevel::class.java)
+                                }."
+                                logger.error(msg)
+                                throw Exception(msg)
+                            }
                         }
                     }
                 }
-            }
 
             return includeFailureLevels
         }
 
         val failureLevels = getFailureLevels()
-        logger.debug("Using ${failureLevels.size} Failure Levels: $failureLevels")
+        logger.debug("Using {} Failure Levels: {}", failureLevels.size, failureLevels)
         failureLevel.set(failureLevels)
         ides {
             logger.lifecycle("Verifying against IntelliJ $platformVersion")
@@ -206,9 +193,9 @@ tasks {
         }
         withType<KotlinCompile> {
             compilerOptions {
-                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(it))
                 /* Enforce a current Kotlin version so older plugins / dependencies don't trigger
                 errors when using older Kotlin versions. */
+                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(it))
                 apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_3)
                 // languageVersion controls which Kotlin language features are available.
                 languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_3)
