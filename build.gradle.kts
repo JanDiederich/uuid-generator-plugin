@@ -45,7 +45,8 @@ dependencies {
 
     testImplementation(platform("org.junit:junit-bom:${properties("junit.version")}"))
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter:${properties("junit.version")}")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:${properties("assertk-jvm.version")}")
 
@@ -245,5 +246,12 @@ val runIdeForUiTests by intellijPlatformTesting.runIde.registering {
 
     plugins {
         robotServerPlugin(Constants.Constraints.LATEST_VERSION)
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
     }
 }

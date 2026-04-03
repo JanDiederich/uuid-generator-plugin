@@ -2,6 +2,7 @@ package com.github.leomillon.uuidgenerator.popup.uuid
 
 import com.github.f4b6a3.uuid.UuidCreator
 import com.github.leomillon.uuidgenerator.UUIDGenerator
+import com.github.leomillon.uuidgenerator.popup.uuid.generator.UUIDGeneratorPopupSettings
 import com.github.leomillon.uuidgenerator.settings.UUIDGeneratorBaseForm
 import java.awt.ItemSelectable
 import java.awt.event.KeyEvent

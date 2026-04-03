@@ -14,13 +14,16 @@ class UtilsTest {
         assertThat(input.containsAtLeast2Numbers()).isEqualTo(expected)
     }
 
-    @Suppress("unused")
-    private fun textWithNumberProvider() = listOf(
-        Arguments.of("SomeText", false),
-        Arguments.of("SomeText1", false),
-        Arguments.of("SomeText12", true),
-        Arguments.of("Some1Text2", true),
-        Arguments.of("Some1 Text2", false),
-        Arguments.of("Some12 Text", true)
-    )
+    companion object {
+        @Suppress("unused")
+        @JvmStatic
+        private fun textWithNumberProvider() = listOf(
+            Arguments.of("SomeText", false),
+            Arguments.of("SomeText1", false),
+            Arguments.of("SomeText12", true),
+            Arguments.of("Some1Text2", true),
+            Arguments.of("Some1 Text2", false),
+            Arguments.of("Some12 Text", true)
+        )
+    }
 }

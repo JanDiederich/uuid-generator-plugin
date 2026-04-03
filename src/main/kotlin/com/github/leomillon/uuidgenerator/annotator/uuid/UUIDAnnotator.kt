@@ -19,6 +19,7 @@ import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
+import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
@@ -56,12 +57,11 @@ private fun highlightInText(
         try {
             val uuid = UuidCreator.fromString(matchingValue)
             uuidVersion = uuid.version()
-            message = if (uuidVersion == 7) {
+            message = if (uuidVersion == 1 || uuidVersion == 7) {
                 val uuidV7Instant = UuidUtil.getInstant(uuid)
-                val zonedDateTime = uuidV7Instant.atZone(ZoneId.systemDefault())
-                uuidV7TimeFormatted = zonedDateTime.format(uuidV7Formatter)
+                uuidV7TimeFormatted = formatInstant(uuidV7Instant)
                 uuidV7TimeMillis = uuidV7Instant.toEpochMilli().toString()
-                "UUIDv7 Timestamp: $uuidV7TimeFormatted"
+                "UUIDv${uuidVersion} Timestamp: $uuidV7TimeFormatted"
             } else {
                 "UUIDv${uuidVersion}"
             }
@@ -105,4 +105,9 @@ private fun highlightInText(
             .withFix(UUIDToggleDashesQuickFix(matchingValue, textRange))
             .create()
     }
+}
+
+fun formatInstant(instant: Instant): String {
+    val zonedDateTime = instant.atZone(ZoneId.systemDefault())
+    return zonedDateTime.format(uuidV7Formatter)
 }

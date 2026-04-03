@@ -20,7 +20,10 @@
                 serviceImplementation="com.github.leomillon.uuidgenerator.settings.uuid.UUIDGeneratorSettings"/>
 
         <applicationService
-                serviceImplementation="com.github.leomillon.uuidgenerator.popup.uuid.UUIDGeneratorPopupSettings"/>
+                serviceImplementation="com.github.leomillon.uuidgenerator.popup.uuid.generator.UUIDGeneratorPopupSettings"/>
+
+        <applicationService
+                serviceImplementation="com.github.leomillon.uuidgenerator.popup.uuid.examiner.UUIDExaminerPopupSettings"/>
 
         <!--ULID-->
         <applicationConfigurable instance="com.github.leomillon.uuidgenerator.settings.ulid.ULIDGeneratorConfigurable"/>
@@ -106,6 +109,13 @@
                     description="Show the UUID generator Popup">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift meta alt U"
                                    second-keystroke="shift meta alt P"/>
+            </action>
+            <action id="uuidexaminer.on-demand-popup"
+                    class="com.github.leomillon.uuidgenerator.action.uuid.ExamineUUIDPopupAction"
+                    text="Examine UUIDs Popup"
+                    description="Show the UUID examiner Popup">
+                <keyboard-shortcut keymap="$default" first-keystroke="shift meta alt U"
+                                   second-keystroke="shift meta alt E"/>
             </action>
         </group>
 

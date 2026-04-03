@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.github.leomillon.uuidgenerator.popup.uuid.UUIDExaminerPopupForm">
+  <grid id="27dc6" binding="panel" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="877" height="441"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="f8be4" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="2" left="2" bottom="2" right="2"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <splitpane id="eb764">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="1100" height="400"/>
+              </grid>
+            </constraints>
+            <properties>
+              <dividerLocation value="550"/>
+              <resizeWeight value="1.0"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <scrollpane id="7961b">
+                <constraints>
+                  <splitpane position="left"/>
+                </constraints>
+                <properties>
+                  <minimumSize width="300" height="19"/>
+                </properties>
+                <border type="none" title="Input"/>
+                <children>
+                  <grid id="f55e7" layout-manager="BorderLayout" hgap="0" vgap="0">
+                    <constraints/>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="5ddf6" class="javax.swing.JTextPane" binding="inputTextPane">
+                        <constraints border-constraint="Center"/>
+                        <properties>
+                          <text value="ID, Street, Postal Code, District, Country, Age, Gender, Something, Somewhat, ID_REFERENCE &#10;fa23fba7-00ed-4eb2-94e7-685c2b2b39dc, &quot;Nothern Street&quot;, 12345, &quot;Southern District&quot;, &quot;State Country&quot;, 23, Male, null, null, 04f98459-c585-430e-a746-0dd641150302&#10;019d52d0-8b4d-72f5-a066-d329aae3652b, &quot;Loch Golf&quot;, 67890, &quot;Sand Place, &quot;Land-Land&quot;, 12, Female, null, null, 019d52d6-3dd9-7802-8174-aacd7a8b59aa"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                </children>
+              </scrollpane>
+              <scrollpane id="30dbd">
+                <constraints>
+                  <splitpane position="right"/>
+                </constraints>
+                <properties>
+                  <minimumSize width="400" height="24"/>
+                </properties>
+                <border type="none" title="Interpreted"/>
+                <children>
+                  <component id="55410" class="javax.swing.JTable" binding="examinationTable">
+                    <constraints/>
+                    <properties/>
+                  </component>
+                </children>
+              </scrollpane>
+            </children>
+          </splitpane>
+          <grid id="1247c" layout-manager="GridLayoutManager" row-count="3" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+            <border type="etched" title="Input data format"/>
+            <children>
+              <component id="6d98a" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Separator"/>
+                </properties>
+              </component>
+              <component id="9db6d" class="javax.swing.JTextField" binding="separatingChars">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="50" height="-1"/>
+                    <maximum-size width="50" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value=","/>
+                </properties>
+              </component>
+              <component id="43ec" class="javax.swing.JCheckBox" binding="trimWhitespaceCheck">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <selected value="true"/>
+                  <text value="Trim Whitespace"/>
+                </properties>
+              </component>
+              <component id="3170b" class="javax.swing.JCheckBox" binding="headerCheck">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <selected value="true"/>
+                  <text value="Has header"/>
+                </properties>
+              </component>
+              <vspacer id="c34c">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <hspacer id="e8d2">
+                <constraints>
+                  <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <component id="9c033" class="javax.swing.JCheckBox" binding="summarizeCheck">
+                <constraints>
+                  <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <selected value="true"/>
+                  <text value="Summarize source"/>
+                </properties>
+              </component>
+              <component id="b40ff" class="javax.swing.JCheckBox" binding="headerSeparatorCheck">
+                <constraints>
+                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <selected value="true"/>
+                  <text value="Has header separator"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <vspacer id="8854d">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <hspacer id="f3984">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+        </children>
+      </grid>
+      <hspacer id="21c05">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </hspacer>
+      <vspacer id="e5cc7">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+    </children>
+  </grid>
+</form>

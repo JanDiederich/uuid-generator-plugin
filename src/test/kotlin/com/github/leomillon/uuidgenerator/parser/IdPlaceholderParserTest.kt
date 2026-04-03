@@ -28,14 +28,14 @@ class IdPlaceholderParserTest {
                 rawValue = "#gen.uuidv4#",
                 idType = IdType.UUIDv4,
                 label = null
-            ) to 0..9
+            ) to 0..11
         ),
         "#gen.uuidv7#" to listOf(
             IdPlaceholder(
                 rawValue = "#gen.uuidv7#",
                 idType = IdType.UUIDv7,
                 label = null
-            ) to 0..9
+            ) to 0..11
         ),
         "#gen.ulid#" to listOf(
             IdPlaceholder(
@@ -72,12 +72,12 @@ class IdPlaceholderParserTest {
                 rawValue = "#gen.ulid#",
                 idType = IdType.ULID,
                 label = null
-            ) to 60..69,
+            ) to 51..60,
             IdPlaceholder(
                 rawValue = "#gen.cuid#",
                 idType = IdType.CUID,
                 label = null
-            ) to 72..81
+            ) to 63..72
         ),
         "#gen.uuid.label_1-bis#" to listOf(
             IdPlaceholder(

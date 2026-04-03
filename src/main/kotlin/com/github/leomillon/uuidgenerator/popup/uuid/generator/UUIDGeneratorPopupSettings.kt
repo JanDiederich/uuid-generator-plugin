@@ -1,4 +1,4 @@
-package com.github.leomillon.uuidgenerator.popup.uuid
+package com.github.leomillon.uuidgenerator.popup.uuid.generator
 
 import com.github.leomillon.uuidgenerator.settings.uuid.UUIDFormatSettings
 import com.intellij.openapi.components.PersistentStateComponent

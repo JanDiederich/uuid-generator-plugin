@@ -2,14 +2,14 @@ package com.github.leomillon.uuidgenerator.action.uuid
 
 import com.github.leomillon.uuidgenerator.action.GeneratePopupAction
 import com.github.leomillon.uuidgenerator.popup.GeneratePopup
-import com.github.leomillon.uuidgenerator.popup.uuid.generator.GenerateUUIDPopup
+import com.github.leomillon.uuidgenerator.popup.uuid.examiner.ExamineUUIDPopup
 
 /**
- * Open the UUID generator popup.
+ * Open the UUID examiner popup.
  *
  * @author Léo Millon
  */
-class GenerateUUIDPopupAction : GeneratePopupAction() {
+class ExamineUUIDPopupAction : GeneratePopupAction() {
     override fun createPopup(): GeneratePopup =
-        GenerateUUIDPopup()
+        ExamineUUIDPopup()
 }
