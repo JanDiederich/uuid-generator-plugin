@@ -5,7 +5,8 @@ import com.github.leomillon.uuidgenerator.parser.findUUIDs
 import com.github.leomillon.uuidgenerator.popup.uuid.summarizeString
 import org.intellij.lang.annotations.Language
 import java.util.*
-import java.util.regex.Pattern
+import com.univocity.parsers.csv.CsvParser
+import com.univocity.parsers.csv.CsvParserSettings
 
 /** All columns per line. */
 data class ExaminationResult(
@@ -211,32 +212,36 @@ $htmlHead
     }
 }
 
-/** Examine a single line.
- * @param trimWhitespace Time the individual line segments / splits.
- * */
+/**
+ * Examine a single line.
+ * @param line The line to parse.
+ * @param parser The preconfigured CSV parser to use.
+ */
 private fun examineLine(
-    line: String, separatingPattern: Pattern?, trimWhitespace: Boolean
+    line: String, parser: CsvParser?
 ): ExaminationResult {
     if (line.isBlank()) {
         return ExaminationResult(line, listOf(), listOf())
     }
-    var split: List<String>
-    split = if (separatingPattern != null) {
-        line.split(separatingPattern)
+    val split: Array<String?> = if (parser != null) {
+        /* Regular expressions are too slow when examining large database excerpts.
+        Another bonus: While double-quotes (") are respected as escaping the separator strings,
+        the double quotes are automatically removed from the resulting segments. */
+        parser.parseLine(line)
     } else {
-        listOf(line)
-    }
-    if (trimWhitespace) {
-        split = split.map { it.trim() }
+        arrayOf(line)
     }
     val uuidList = mutableListOf<UuidInfos>()
     val cells = listOf<CellInfo>()
     for (lineEntry in split) {
+        if (lineEntry == null) {
+            continue
+        }
         val uuidInfos: ArrayList<UuidInfo> = ArrayList<UuidInfo>()
         lineEntry.findUUIDs().forEach { (matchingValue, _) ->
             val uuid = try {
                 UUID.fromString(matchingValue)
-            } catch (e: IllegalArgumentException) {
+            } catch (_: IllegalArgumentException) {
                 null
             }
             if (uuid != null) {
@@ -278,11 +283,11 @@ private fun findColumnMaximums(examinedLines: List<ExaminationResult>): List<Spl
         if (examinedLine.uuidList?.isNotEmpty() == true) {
             // = 1 because the 1st column is always added as the source.
             var splitInfoIndex = 1
-            for ((splitSegmentIndex, uuidInfos) in examinedLine.uuidList!!.withIndex()) {
+            for ((splitSegmentIndex, uuidInfos) in examinedLine.uuidList.withIndex()) {
                 var size = 0
                 if (uuidInfos.infos?.isNotEmpty() == true) {
                     val uuidColumnCount = mutableListOf<ColumnCount>()
-                    for ((uuidInfoPerSplitSegmentIndex, uuidInfo) in uuidInfos.infos!!.withIndex()) {
+                    for ((uuidInfoPerSplitSegmentIndex, uuidInfo) in uuidInfos.infos.withIndex()) {
                         uuidColumnCount.add(ColumnCount(uuidInfo, uuidInfoPerSplitSegmentIndex))
                         size += uuidInfo.columnCount
                     }
@@ -358,7 +363,7 @@ private fun buildCellInfos(
                                 // If max columns reached, this must be identical.
                                 if (uuidColumns.columnCount != uuidInfo.columnCount) {
                                     throw IllegalStateException(
-                                        "Inconsistent column count for split index $splitInfoIndex," + " column index $splitInfoColumnIndex"
+                                        "Inconsistent column count for split index $splitInfoIndex, column index $splitInfoColumnIndex"
                                     )
                                 }
                                 cells.add(CellInfo(ColumnType.Timestamp, uuidInfo.timestamp))
@@ -464,21 +469,33 @@ fun convertInputToTableLines(
     hasHeaderSeparator: Boolean,
     summarizeSource: Boolean
 ): BuildResult {
-    /* Regex to make this:
-        a,"b,c","d""e,f",g
-    lead to:
-        a
-        "b,c"
-        "d""e,f"
-        g
+    /* Parser to make this:
+            a,"b,c","d""e,f",g
+        parse correctly.
 
-    So that the separator (like a "," or a "|"), enclosed in double-quotes ("),
-    doesn't count as split instruction.
-     */
-    val separatingPattern = Pattern.compile("$separatingChars(?=(?:[^\"]|\"(?:\"\"|[^\"])*\")*$)")
-    val examinedLines = input.lines() //
-        .filterIndexed { index, _ -> !(hasHeaderSeparator && index == 1) }
-        .map { line -> examineLine(line.trim(), separatingPattern, trimWhitespace) }
+        So that the separator (like a "," or a "|"), enclosed in double-quotes ("),
+        doesn't count as split instruction. Also surrounding quotes are stripped from
+        the result. */
+    val format: CsvParser? = if (separatingChars?.isNotEmpty() == true) {
+        val settings = CsvParserSettings()
+        settings.format.setDelimiter(separatingChars)
+        settings.format.quote = '\"'
+        settings.ignoreLeadingWhitespaces = trimWhitespace
+        settings.ignoreTrailingWhitespaces = trimWhitespace
+        // Don't fail on unescaped/malformed quotes
+        settings.keepQuotes = false
+        settings.isQuoteDetectionEnabled = false
+        CsvParser(settings)
+    } else {
+        null
+    }
+    var lines = input.lines()
+    if (lines.size >= 2 && hasHeaderSeparator) {
+        // Remove header separator at index 1
+        lines = lines.toMutableList().also { it.removeAt(1) }
+    }
+    val examinedLines = lines
+        .map { line -> examineLine(line.trim(), format) }
     val splitInfos = findColumnMaximums(examinedLines)
 
     buildCellInfos(examinedLines, splitInfos, summarizeSource)

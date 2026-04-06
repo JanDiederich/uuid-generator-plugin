@@ -27,12 +27,15 @@ class UUIDExaminerTest {
         const val uuidV7 = "019d52d0-8b4d-72f5-a066-d329aae3652b"
         const val uuidV7_2 = "019d52d6-3dd9-7802-8174-aacd7a8b59aa"
 
-        const val header = "ID, Street, Postal Code, District, Country, Age, Gender, Whatever, Whoever, REFERENCE_ID"
+        /* Add intentionally malformed, erroneous quoted strings,
+           to make sure the parse handles it gracefully (looking especially at the Apache CSV Parser). */
+        const val header =
+            "ID, Street, Postal Code, District, \"Country, \"Age\", Gender, Whatever, Whoever, REFERENCE_ID"
         val line0 = """
-                $uuidV4, "Northern Street", 12345, "Southern District", "State Country", 23, Male, null, null, $uuidV4_2
+                $uuidV4, "Northern Street", 12345, "Southern District", "State Country, "23", Male, null, null, $uuidV4_2
             """.trim()
         val line1 = """
-                $uuidV7, "Loch Golf", 67890, "Sand, Place", "Land-Land", 12, Female, null, null, $uuidV7_2
+                $uuidV7, "Loch Golf", 67890, "Sand, Place",    "Land-Land, "12", Female, null, null, $uuidV7_2
             """.trim()
         const val uuidV7Time = "2026-04-03T10:08:12.109Z"
         val uuidV7Instant: Instant = Instant.parse(uuidV7Time)
@@ -92,8 +95,7 @@ class UUIDExaminerTest {
                                 UuidInfos("Street", null),
                                 UuidInfos("Postal Code", null),
                                 UuidInfos("District", null),
-                                UuidInfos("Country", null),
-                                UuidInfos("Age", null),
+                                UuidInfos("\"Country, \"Age\"", null),
                                 UuidInfos("Gender", null),
                                 UuidInfos("Whatever", null),
                                 UuidInfos("Whoever", null),
@@ -120,13 +122,11 @@ class UUIDExaminerTest {
                                     )
                                 ),
                                 // Northern Street
-                                UuidInfos("\"Northern Street\"", null),
+                                UuidInfos("Northern Street", null),
                                 // 12345
                                 UuidInfos("12345", null),
-                                // State Country
-                                UuidInfos("\"Southern District\"", null), UuidInfos("\"State Country\"", null),
-                                // 23
-                                UuidInfos("23", null),
+                                // State Country // 23
+                                UuidInfos("Southern District", null), UuidInfos("\"State Country, \"23\"", null),
                                 // Male
                                 UuidInfos("Male", null),
                                 // null
@@ -158,21 +158,21 @@ class UUIDExaminerTest {
                                         UuidInfo(uuidV7, UUID.fromString(uuidV7), uuidV7Instant)
                                     )
                                 ),
-                                // Northern Street
-                                UuidInfos("\"Loch Golf\"", null),
-                                // 12345
+                                // Loch Golf
+                                UuidInfos("Loch Golf", null),
+                                // 67890
                                 UuidInfos("67890", null),
-                                // State Country
-                                UuidInfos("\"Sand, Place\"", null), UuidInfos("\"Land-Land\"", null),
-                                // 23
-                                UuidInfos("12", null),
-                                // Male
+                                // Sand, Place
+                                UuidInfos("Sand, Place", null),
+                                // Land-Land // 12
+                                UuidInfos("\"Land-Land, \"12\"", null),
+                                // Female
                                 UuidInfos("Female", null),
                                 // null
                                 UuidInfos("null", null),
                                 // null
                                 UuidInfos("null", null),
-                                // uuidV4_2
+                                // uuidV7_2
                                 UuidInfos(
                                     uuidV7_2, listOf(UuidInfo(uuidV7_2, UUID.fromString(uuidV7_2), uuidV7Instant2))
                                 )

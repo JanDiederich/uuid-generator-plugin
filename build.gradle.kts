@@ -42,6 +42,8 @@ dependencies {
     // Support UUIDv7
     implementation("com.github.f4b6a3:uuid-creator:6.1.1")
     implementation("cool.graph:cuid-java:0.1.1")
+    // Faster parsing of large data-sets in UUID examiner, auto-remove '"'.
+    implementation("com.univocity:univocity-parsers:2.9.1")
 
     testImplementation(platform("org.junit:junit-bom:${properties("junit.version")}"))
     testImplementation("junit:junit:4.13.2")
