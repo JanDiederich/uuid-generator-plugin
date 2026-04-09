@@ -6,6 +6,7 @@ import assertk.assertions.isEqualTo
 import com.github.leomillon.uuidgenerator.popup.uuid.examiner.items.*
 import com.github.leomillon.uuidgenerator.popup.uuid.summarizeString
 import com.jetbrains.rd.util.UUID
+import org.junit.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.Instant
@@ -227,5 +228,16 @@ class UUIDExaminerTest {
         assertAll {
             assertThat(html).isEqualTo(testParameter.htmlResult)
         }
+    }
+
+    // For manually testing, if the IntelliJ debugger live evaluation works.
+    @Test
+    fun testUuidDebugging() {
+        val uuidV4: String = uuidV4
+        val uuidV4Value: UUID = UUID.fromString(Companion.uuidV4)
+
+        val uuidV7: String = uuidV7
+        val uuidV7Value: UUID = UUID.fromString(Companion.uuidV7)
+        println("UUID: $uuidV4 $uuidV4Value, $uuidV7 $uuidV7Value")
     }
 }

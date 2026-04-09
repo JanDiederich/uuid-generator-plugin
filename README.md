@@ -97,6 +97,10 @@ quick fix suggestions
 
 ![ID placeholders replacement action](./screenshots/id_placeholders_replacement.apng)
 
+- Live debugger insights
+
+![Live debugger insights](./screenshots/debugger_insights.png)
+
 ## Contributors
 
 Special thanks to:

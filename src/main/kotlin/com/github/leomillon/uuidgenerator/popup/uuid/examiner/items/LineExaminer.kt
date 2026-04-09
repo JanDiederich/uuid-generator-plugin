@@ -3,10 +3,13 @@ package com.github.leomillon.uuidgenerator.popup.uuid.examiner.items
 import com.github.f4b6a3.uuid.util.UuidUtil
 import com.github.leomillon.uuidgenerator.parser.findUUIDs
 import com.github.leomillon.uuidgenerator.popup.uuid.summarizeString
+import com.intellij.platform.syntax.tree.parse
 import org.intellij.lang.annotations.Language
 import java.util.*
 import com.univocity.parsers.csv.CsvParser
 import com.univocity.parsers.csv.CsvParserSettings
+import fleet.util.letIfNotNull
+import java.time.Instant
 
 /** All columns per line. */
 data class ExaminationResult(
@@ -212,6 +215,28 @@ $htmlHead
     }
 }
 
+data class ParsedUuid(val uuid: UUID, val version: Int, val timestamp: Instant?)
+
+fun examineString(matchingValue: String): ParsedUuid? {
+    return try {
+        UUID.fromString(matchingValue)
+    } catch (_: IllegalArgumentException) {
+        null
+    }?.let { uuid: UUID ->
+        val version = uuid.version()
+        val timestamp = if (version == 1 || version == 7) {
+            try {
+                UuidUtil.getInstant(uuid)
+            } catch (_: IllegalArgumentException) {
+                null
+            }
+        } else {
+            null
+        }
+        ParsedUuid(uuid, version, timestamp)
+    }
+}
+
 /**
  * Examine a single line.
  * @param line The line to parse.
@@ -239,23 +264,8 @@ private fun examineLine(
         }
         val uuidInfos: ArrayList<UuidInfo> = ArrayList<UuidInfo>()
         lineEntry.findUUIDs().forEach { (matchingValue, _) ->
-            val uuid = try {
-                UUID.fromString(matchingValue)
-            } catch (_: IllegalArgumentException) {
-                null
-            }
-            if (uuid != null) {
-                val version = uuid.version()
-                val timestamp = if (version == 1 || version == 7) {
-                    try {
-                        UuidUtil.getInstant(uuid)
-                    } catch (e: IllegalArgumentException) {
-                        null
-                    }
-                } else {
-                    null
-                }
-                uuidInfos.add(UuidInfo(matchingValue, uuid, timestamp))
+            examineString(matchingValue)?.let { parsedUuid ->
+                uuidInfos.add(UuidInfo(matchingValue, parsedUuid.uuid, parsedUuid.timestamp))
             }
         }
         if (uuidInfos.isNotEmpty()) {
