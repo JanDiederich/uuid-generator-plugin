@@ -44,6 +44,8 @@ dependencies {
     implementation("cool.graph:cuid-java:0.1.1")
     // Faster parsing of large data-sets in UUID examiner, auto-remove '"'.
     implementation("com.univocity:univocity-parsers:2.9.1")
+    // LGoodDatePicker
+    implementation("com.github.lgooddatepicker:LGoodDatePicker:11.2.1")
 
     testImplementation(platform("org.junit:junit-bom:${properties("junit.version")}"))
     testImplementation("junit:junit:4.13.2")

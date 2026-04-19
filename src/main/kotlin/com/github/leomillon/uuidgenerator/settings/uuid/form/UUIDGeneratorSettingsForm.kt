@@ -3,14 +3,10 @@ package com.github.leomillon.uuidgenerator.settings.uuid.form
 import com.github.leomillon.uuidgenerator.UUIDGenerator
 import com.github.leomillon.uuidgenerator.settings.UUIDGeneratorBaseForm
 import com.github.leomillon.uuidgenerator.settings.uuid.UUIDGeneratorSettings
+import com.github.lgooddatepicker.components.DateTimePicker
 import java.awt.ItemSelectable
 import java.util.*
-import javax.swing.JCheckBox
-import javax.swing.JComponent
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.JRadioButton
-import javax.swing.JSpinner
+import javax.swing.*
 
 class UUIDGeneratorSettingsForm : UUIDGeneratorBaseForm {
 
@@ -28,13 +24,7 @@ class UUIDGeneratorSettingsForm : UUIDGeneratorBaseForm {
     override var currentTimeRadioButton: JRadioButton? = null
     override var fixedTimeRadioButton: JRadioButton? = null
     override var timePanel: JPanel? = null
-    override var yearSpinner: JSpinner? = null
-    override var monthSpinner: JSpinner? = null
-    override var daySpinner: JSpinner? = null
-    override var hourSpinner: JSpinner? = null
-    override var minuteSpinner: JSpinner? = null
-    override var secondSpinner: JSpinner? = null
-    override var millisSpinner: JSpinner? = null
+    override var timePicker: DateTimePicker? = null
 
     private val uuidV4Preview = UUID.fromString("242e6506-710e-4af9-8b3d-dfcfad4bc9a6")
     private val uuidV7Preview = UUID.fromString("019d10e9-3e28-7683-9758-8d7a97205099")
@@ -63,13 +53,8 @@ class UUIDGeneratorSettingsForm : UUIDGeneratorBaseForm {
 
         setPanelEnabled(timePanel, settings.fixedTime && !settings.uuidVersion4)
 
-        yearSpinner?.value = settings.year
-        monthSpinner?.value = settings.month
-        daySpinner?.value = settings.day
-        hourSpinner?.value = settings.hour
-        minuteSpinner?.value = settings.minute
-        secondSpinner?.value = settings.second
-        millisSpinner?.value = settings.millis
+        timePicker?.datePicker?.settings?.setFormatForDatesCommonEra("yyyy-MM-dd")
+        timePicker?.dateTimePermissive = settings.uuidCreationTime
 
         sequenceOf<ItemSelectable?>(
             uuidV4RadioButton,
@@ -114,14 +99,7 @@ class UUIDGeneratorSettingsForm : UUIDGeneratorBaseForm {
         settings.longSize = isLongSize() ?: true
         settings.codeHighlighting = codeHighlightingEnabled() ?: true
         settings.fixedTime = isFixedTime()
-
-        settings.year = year()
-        settings.month = month()
-        settings.day = dayOfMonth()
-        settings.hour = hour()
-        settings.minute = minute()
-        settings.second = second()
-        settings.millis = millis()
+        settings.uuidCreationTime = uuidCreationTime()
     }
 
     fun component(): JComponent? = panel
@@ -135,13 +113,6 @@ class UUIDGeneratorSettingsForm : UUIDGeneratorBaseForm {
                 || isLongSize() != settings.longSize
                 || codeHighlightingEnabled() != settings.codeHighlighting
                 || isFixedTime() != settings.fixedTime
-
-                || year() != settings.year
-                || month() != settings.month
-                || dayOfMonth() != settings.day
-                || hour() != settings.hour
-                || minute() != settings.minute
-                || second() != settings.second
-                || millis() != settings.millis
+                || uuidCreationTime() != settings.uuidCreationTime
                 )
 }

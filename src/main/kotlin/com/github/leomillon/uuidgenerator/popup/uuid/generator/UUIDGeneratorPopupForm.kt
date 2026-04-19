@@ -4,6 +4,7 @@ import com.github.f4b6a3.uuid.UuidCreator
 import com.github.leomillon.uuidgenerator.UUIDGenerator
 import com.github.leomillon.uuidgenerator.popup.uuid.generator.UUIDGeneratorPopupSettings
 import com.github.leomillon.uuidgenerator.settings.UUIDGeneratorBaseForm
+import com.github.lgooddatepicker.components.DateTimePicker
 import java.awt.ItemSelectable
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
@@ -26,13 +27,7 @@ class UUIDGeneratorPopupForm : UUIDGeneratorBaseForm {
     override var currentTimeRadioButton: JRadioButton? = null
     override var fixedTimeRadioButton: JRadioButton? = null
     override var timePanel: JPanel? = null
-    override var yearSpinner: JSpinner? = null
-    override var monthSpinner: JSpinner? = null
-    override var daySpinner: JSpinner? = null
-    override var hourSpinner: JSpinner? = null
-    override var minuteSpinner: JSpinner? = null
-    override var secondSpinner: JSpinner? = null
-    override var millisSpinner: JSpinner? = null
+    override var timePicker: DateTimePicker? = null
 
     private var numberInputField: JSpinner? = null
     private var separatorInputField: JTextField? = null
@@ -49,8 +44,8 @@ class UUIDGeneratorPopupForm : UUIDGeneratorBaseForm {
     }
 
     private fun loadSettings() {
-        uuidV4RadioButton?.isSelected = settings.version4
-        uuidV7RadioButton?.isSelected = !settings.version4
+        uuidV4RadioButton?.isSelected = settings.uuidVersion4
+        uuidV7RadioButton?.isSelected = !settings.uuidVersion4
         lowerCaseRadioButton?.isSelected = settings.lowerCased
         upperCaseRadioButton?.isSelected = !settings.lowerCased
         withDashesRadioButton?.isSelected = settings.withDashes
@@ -66,15 +61,10 @@ class UUIDGeneratorPopupForm : UUIDGeneratorBaseForm {
         currentTimeRadioButton?.isSelected = !settings.fixedTime
         fixedTimeRadioButton?.isSelected = settings.fixedTime
 
-        setPanelEnabled(timePanel, settings.fixedTime && !settings.version4)
+        setPanelEnabled(timePanel, settings.fixedTime && !settings.uuidVersion4)
 
-        yearSpinner?.value = settings.year
-        monthSpinner?.value = settings.month
-        daySpinner?.value = settings.day
-        hourSpinner?.value = settings.hour
-        minuteSpinner?.value = settings.minute
-        secondSpinner?.value = settings.second
-        millisSpinner?.value = settings.millis
+        timePicker?.datePicker?.settings?.setFormatForDatesCommonEra("yyyy-MM-dd")
+        timePicker?.dateTimePermissive = settings.uuidCreationTime
 
         sequenceOf<ItemSelectable?>(
             uuidV4RadioButton,
@@ -99,24 +89,12 @@ class UUIDGeneratorPopupForm : UUIDGeneratorBaseForm {
                 }
             }
         // Time spinners.
-        sequenceOf(
-            yearSpinner,
-            monthSpinner,
-            daySpinner,
-            hourSpinner,
-            minuteSpinner,
-            secondSpinner,
-            millisSpinner
-        )
-            .filterNotNull()
-            .forEach { uiComponent: JSpinner? ->
-                uiComponent?.addChangeListener {
-                    if (isVersion7() == true && isFixedTime()) {
-                        updateIds()
-                        updatePreview()
-                    }
-                }
+        timePicker?.addDateTimeChangeListener {
+            if (isVersion7() == true && isFixedTime()) {
+                updateIds()
+                updatePreview()
             }
+        }
 
         numberInputField?.addChangeListener {
             updateIds()
@@ -196,17 +174,13 @@ class UUIDGeneratorPopupForm : UUIDGeneratorBaseForm {
     private fun getNumberToGenerate(): Int? {
         return numberInputField?.value
             ?.let {
-                if (it is Int) {
-                    it
-                } else {
-                    null
-                }
+                it as? Int
             }
             ?.takeIf { it > 0 }
     }
 
     fun applyToSettings(settings: UUIDGeneratorPopupSettings) {
-        settings.version4 = isVersion4() ?: true
+        settings.uuidVersion4 = isVersion4() ?: true
         settings.lowerCased = isLowerCased() ?: true
         settings.withDashes = isWithDashes() ?: true
         settings.longSize = isLongSize() ?: true
@@ -215,14 +189,7 @@ class UUIDGeneratorPopupForm : UUIDGeneratorBaseForm {
         settings.prefixFieldValue = prefixInputField?.text ?: ""
         settings.suffixFieldValue = suffixInputField?.text ?: ""
         settings.fixedTime = isFixedTime()
-
-        settings.year = year()
-        settings.month = month()
-        settings.day = dayOfMonth()
-        settings.hour = hour()
-        settings.minute = minute()
-        settings.second = second()
-        settings.millis = millis()
+        settings.uuidCreationTime = timePicker?.dateTimePermissive
     }
 
     fun component(): JComponent? = panel
