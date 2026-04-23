@@ -54,7 +54,7 @@ class UuidNodeRenderer : NodeRendererImpl() {
         if (value is StringReference) {
             val str = value.value().trim()
             if (str.length < UUID_WITHOUT_DASH_LENGTH) {
-                return "\"$str\""
+                return str
             }
             val examined = examineString(str)
             if (examined != null) {
@@ -65,7 +65,7 @@ class UuidNodeRenderer : NodeRendererImpl() {
                 }
                 return "\"$str\" → UUIDv${examined.version} $timestamp"
             }
-            return "\"$str\""
+            return str
         }
 
         // Handle java.util.UUID

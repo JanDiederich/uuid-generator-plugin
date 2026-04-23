@@ -236,8 +236,9 @@ class UUIDExaminerTest {
         val uuidV4: String = uuidV4
         val uuidV4Value: UUID = UUID.fromString(Companion.uuidV4)
 
+        val arbitraryString = "Hello World"
         val uuidV7: String = uuidV7
         val uuidV7Value: UUID = UUID.fromString(Companion.uuidV7)
-        println("UUID: $uuidV4 $uuidV4Value, $uuidV7 $uuidV7Value")
+        println("UUID: $uuidV4 $uuidV4Value, $uuidV7 $uuidV7Value, $arbitraryString")
     }
 }
