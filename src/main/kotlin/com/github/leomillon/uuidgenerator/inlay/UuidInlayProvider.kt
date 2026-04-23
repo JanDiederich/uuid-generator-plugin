@@ -47,8 +47,13 @@ private class UuidDebugInlayCollector : SharedBypassCollector {
                     append("UUID v$version")
                     if (timestamp != null) append(" ${formatInstant(timestamp)}")
                 }
+                val position: InlayPosition = if (timestamp == null) {
+                    InlineInlayPosition(range.first + element.textRange.startOffset, true)
+                } else {
+                    AboveLineIndentedPosition(range.first + element.textRange.startOffset)
+                }
                 sink.addPresentation(
-                    position = InlineInlayPosition(range.first + element.textRange.startOffset, true),
+                    position = position,
                     payloads = null,
                     tooltip = hint,
                     hintFormat = HintFormat.default,
