@@ -4,6 +4,7 @@ import com.github.f4b6a3.uuid.util.UuidUtil
 import com.github.leomillon.uuidgenerator.annotator.uuid.formatInstant
 import com.github.leomillon.uuidgenerator.parser.UUID_WITHOUT_DASH_LENGTH
 import com.github.leomillon.uuidgenerator.popup.uuid.examiner.items.examineString
+import com.github.leomillon.uuidgenerator.settings.uuid.UUIDGeneratorSettings
 import com.intellij.debugger.engine.evaluation.EvaluationContext
 import com.intellij.debugger.ui.impl.watch.FieldDescriptorImpl
 import com.intellij.debugger.ui.tree.DebuggerTreeNode
@@ -12,6 +13,7 @@ import com.intellij.debugger.ui.tree.ValueDescriptor
 import com.intellij.debugger.ui.tree.render.ChildrenBuilder
 import com.intellij.debugger.ui.tree.render.DescriptorLabelListener
 import com.intellij.debugger.ui.tree.render.NodeRendererImpl
+import com.intellij.debugger.ui.tree.render.ToStringRenderer
 import com.intellij.openapi.project.Project
 import com.sun.jdi.Field
 import com.sun.jdi.LongValue
@@ -23,11 +25,14 @@ import java.util.concurrent.CompletableFuture
 import kotlin.reflect.jvm.jvmName
 
 class UuidNodeRenderer : NodeRendererImpl() {
+    private val stringRenderer: ToStringRenderer = ToStringRenderer()
+
     init {
         isEnabled = true
         setIsApplicableChecker { type ->
             CompletableFuture.completedFuture(
-                type?.name() in setOf(
+                UUIDGeneratorSettings.instance.debuggerInsight //
+                        && type?.name() in setOf(
                     String::class.jvmName, UUID::class.jvmName
                 )
             )
@@ -54,7 +59,7 @@ class UuidNodeRenderer : NodeRendererImpl() {
         if (value is StringReference) {
             val str = value.value().trim()
             if (str.length < UUID_WITHOUT_DASH_LENGTH) {
-                return str
+                return stringRenderer.calcLabel(descriptor, evaluationContext, listener)
             }
             val examined = examineString(str)
             if (examined != null) {
@@ -65,7 +70,7 @@ class UuidNodeRenderer : NodeRendererImpl() {
                 }
                 return "\"$str\" → UUIDv${examined.version} $timestamp"
             }
-            return str
+            return stringRenderer.calcLabel(descriptor, evaluationContext, listener)
         }
 
         // Handle java.util.UUID
@@ -91,10 +96,10 @@ class UuidNodeRenderer : NodeRendererImpl() {
     }
 
     override fun buildChildren(value: Value, builder: ChildrenBuilder, evaluationContext: EvaluationContext) {
-        val obj = value as? ObjectReference ?: return
+        val obj = value as? ObjectReference
 
         // Re-Insert mostSigBits and leastSigBits nodes for fields of UUID classes.
-        if (obj.referenceType().name() == UUID::class.jvmName) {
+        if (obj?.referenceType()?.name() == UUID::class.jvmName) {
             val refType = obj.referenceType()
             val mostField = refType.fieldByName("mostSigBits")
             val leastField = refType.fieldByName("leastSigBits")
@@ -110,6 +115,8 @@ class UuidNodeRenderer : NodeRendererImpl() {
                 children.add(nodeManager.createNode(fieldDescriptor, evaluationContext))
             }
             builder.setChildren(children)
+        } else if (value is StringReference) {
+            stringRenderer.buildChildren(value, builder, evaluationContext)
         }
     }
 
@@ -117,7 +124,7 @@ class UuidNodeRenderer : NodeRendererImpl() {
         value: Value, context: EvaluationContext, parentDescriptor: NodeDescriptor
     ): CompletableFuture<Boolean> {
         val isUuidClass = (value is ObjectReference) && (value.referenceType().name() == UUID::class.jvmName)
-        return CompletableFuture.completedFuture(isUuidClass)
+        return CompletableFuture.completedFuture(isUuidClass || (value is StringReference))
     }
 }
 

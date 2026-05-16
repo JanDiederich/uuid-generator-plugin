@@ -31,6 +31,7 @@ class UUIDGeneratorSettingsForm : UUIDGeneratorBaseForm {
 
     private var previewValue: JLabel? = null
     private var highlightingCheckbox: JCheckBox? = null
+    private var debuggerInsightCheckbox: JCheckBox? = null
 
     private val settings: UUIDGeneratorSettings = UUIDGeneratorSettings.instance
 
@@ -48,6 +49,7 @@ class UUIDGeneratorSettingsForm : UUIDGeneratorBaseForm {
         longSizeRadioButton?.isSelected = settings.longSize
         shortSizeRadioButton?.isSelected = !settings.longSize
         highlightingCheckbox?.isSelected = settings.codeHighlighting
+        debuggerInsightCheckbox?.isSelected = settings.debuggerInsight
         currentTimeRadioButton?.isSelected = !settings.fixedTime
         fixedTimeRadioButton?.isSelected = settings.fixedTime
 
@@ -98,6 +100,7 @@ class UUIDGeneratorSettingsForm : UUIDGeneratorBaseForm {
         settings.withDashes = isWithDashes() ?: true
         settings.longSize = isLongSize() ?: true
         settings.codeHighlighting = codeHighlightingEnabled() ?: true
+        settings.debuggerInsight = debuggerInsightEnabled() ?: true
         settings.fixedTime = isFixedTime()
         settings.uuidCreationTime = uuidCreationTime()
     }
@@ -105,6 +108,7 @@ class UUIDGeneratorSettingsForm : UUIDGeneratorBaseForm {
     fun component(): JComponent? = panel
 
     private fun codeHighlightingEnabled() = highlightingCheckbox?.isSelected
+    private fun debuggerInsightEnabled() = debuggerInsightCheckbox?.isSelected
 
     val isModified: Boolean
         get() = (isUuidVersion4() != settings.uuidVersion4
@@ -112,6 +116,7 @@ class UUIDGeneratorSettingsForm : UUIDGeneratorBaseForm {
                 || isWithDashes() != settings.withDashes
                 || isLongSize() != settings.longSize
                 || codeHighlightingEnabled() != settings.codeHighlighting
+                || debuggerInsightEnabled() != settings.debuggerInsight
                 || isFixedTime() != settings.fixedTime
                 || uuidCreationTime() != settings.uuidCreationTime
                 )

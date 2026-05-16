@@ -12,11 +12,11 @@ import java.util.*
 
 class UuidInlayProvider : InlayHintsProvider {
     override fun createCollector(file: PsiFile, editor: Editor): InlayHintsCollector {
-        return UuidDebugInlayCollector()
+        return UuidInlayCollector()
     }
 }
 
-private class UuidDebugInlayCollector : SharedBypassCollector {
+private class UuidInlayCollector : SharedBypassCollector {
     override fun collectFromElement(
         element: PsiElement,
         sink: InlayTreeSink

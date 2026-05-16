@@ -30,6 +30,7 @@ class UUIDGeneratorSettings : PersistentStateComponent<UUIDGeneratorSettings>,
     var withDashes = true
     var longSize = true
     var codeHighlighting = true
+    var debuggerInsight = true
 
     /** Is the current time used as base for UUIDv7 or a fixed time. */
     var fixedTime = true
