@@ -8,7 +8,7 @@
 
     <change-notes><![CDATA[ Change notes will be added by gradle build]]></change-notes>
 
-    <idea-version since-build="253"/>
+    <idea-version since-build="261"/>
 
     <!-- UUID extra debugger labels. -->
     <depends>com.intellij.java</depends>

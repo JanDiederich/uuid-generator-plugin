@@ -232,8 +232,8 @@ class UUIDExaminerPopupForm {
         val text = try {
             Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor) as? String
         } catch (e: Exception) {
-            logger.warn("Failed to read clipboard content for paste")
-            throw e
+            logger.warn("Failed to read clipboard content for paste", e)
+            null
         } ?: return
 
         val pane = inputTextPane ?: return
@@ -338,7 +338,7 @@ class UUIDExaminerPopupForm {
             inputTextPane?.text = settings.inputText
         }
         separatingChars?.text = settings.separatingChars
-        trimWhitespaceCheck?.isSelected = settings.trimeWhitespace
+        trimWhitespaceCheck?.isSelected = settings.trimWhitespace
         headerCheck?.isSelected = settings.hasHeader
         headerSeparatorCheck?.isSelected = settings.hasHeaderSeparator
         summarizeCheck?.isSelected = settings.summarizeCheck
@@ -347,7 +347,7 @@ class UUIDExaminerPopupForm {
     fun applyToSettings(settings: UUIDExaminerPopupSettings) {
         settings.inputText = inputTextPane?.text
         settings.separatingChars = separatingChars?.text ?: ""
-        settings.trimeWhitespace = trimWhitespaceCheck?.isSelected == true
+        settings.trimWhitespace = trimWhitespaceCheck?.isSelected == true
         settings.hasHeader = headerCheck?.isSelected == true
         settings.hasHeaderSeparator = headerSeparatorCheck?.isSelected == true
         settings.summarizeCheck = summarizeCheck?.isSelected == true

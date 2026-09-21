@@ -17,7 +17,7 @@ class UUIDExaminerPopupSettings : PersistentStateComponent<UUIDExaminerPopupSett
 
     var inputText: String? = null
     var separatingChars: String = ","
-    var trimeWhitespace: Boolean = true
+    var trimWhitespace: Boolean = true
     var hasHeader: Boolean = true
     var hasHeaderSeparator: Boolean = true
     var summarizeCheck: Boolean = true

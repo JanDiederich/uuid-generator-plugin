@@ -15,7 +15,7 @@
     <li>ULID <a href="https://github.com/ulid/spec">ULID</a></li>
     <li>CUID <a href="https://github.com/ericelliott/cuid">CUID</a></li>
 </ul>
-generator plugin for IntelliJ based IDEs.</p>
+generator plugin for IntelliJ based IDEs.
 
 <p align="center">
     <a href="https://github.com/leomillon/uuid-generator-plugin/actions?query=workflow%3A%22Build+branch%22+branch%3Amaster"><img src="https://github.com/leomillon/uuid-generator-plugin/workflows/Build%20branch/badge.svg?branch=master"></a>

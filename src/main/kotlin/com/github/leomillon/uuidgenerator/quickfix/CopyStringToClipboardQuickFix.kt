@@ -29,6 +29,6 @@ class CopyStringToClipboardQuickFix(
         editor: Editor,
         psiFile: PsiFile
     ): IntentionPreviewInfo {
-        return IntentionPreviewInfo.Html("<p>${source}</p>")
+        return IntentionPreviewInfo.Html("<p>${com.intellij.openapi.util.text.StringUtil.escapeXmlEntities(source)}</p>")
     }
 }

@@ -3,13 +3,11 @@ package com.github.leomillon.uuidgenerator.popup.uuid.examiner.items
 import com.github.f4b6a3.uuid.util.UuidUtil
 import com.github.leomillon.uuidgenerator.parser.findUUIDs
 import com.github.leomillon.uuidgenerator.popup.uuid.summarizeString
-import com.intellij.platform.syntax.tree.parse
-import org.intellij.lang.annotations.Language
-import java.util.*
 import com.univocity.parsers.csv.CsvParser
 import com.univocity.parsers.csv.CsvParserSettings
-import fleet.util.letIfNotNull
+import org.intellij.lang.annotations.Language
 import java.time.Instant
+import java.util.*
 
 /** All columns per line. */
 data class ExaminationResult(

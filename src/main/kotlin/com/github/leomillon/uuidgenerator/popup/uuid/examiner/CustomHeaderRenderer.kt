@@ -8,8 +8,8 @@ import javax.swing.*
 import javax.swing.SwingConstants.CENTER
 import javax.swing.table.DefaultTableCellRenderer
 
-private fun backgroundColor(): Color? = UIManager.getColor("TableHeader.background")
-private fun foregroundColor(): Color? = UIManager.getColor("TableHeader.foreground")
+private fun backgroundColor(): Color = UIManager.getColor("TableHeader.background") ?: JBColor.BLACK
+private fun foregroundColor(): Color = UIManager.getColor("TableHeader.foreground") ?: JBColor.GRAY
 
 private fun defaultHeaderLabel(text: String): JLabel {
     val label = JLabel(text, CENTER)
@@ -102,7 +102,7 @@ class CustomHeaderRenderer(var headerInfo: HeaderInfo) : DefaultTableCellRendere
                 spanWidth += columnModel.getColumn(c).width
             }
 
-            g2d.color = foregroundColor() ?: JBColor.GRAY
+            g2d.color = foregroundColor()
             // Draw separator line at top of the top row
             g2d.drawLine(spanStartX, 1, spanStartX + spanWidth - 1, 1)
             // Bottom horizontal separator already drawn by the 2nd row top line border.
@@ -120,7 +120,7 @@ class CustomHeaderRenderer(var headerInfo: HeaderInfo) : DefaultTableCellRendere
             // Draw centered title across the full span
             val font = this.font.deriveFont(Font.PLAIN)
             g2d.font = font
-            g2d.color = foregroundColor() ?: JBColor.BLACK
+            g2d.color = foregroundColor()
             val fontMetrics = g2d.fontMetrics
             val textWidth = fontMetrics.stringWidth(gt.title)
             val textX = spanStartX + (spanWidth - textWidth) / 2

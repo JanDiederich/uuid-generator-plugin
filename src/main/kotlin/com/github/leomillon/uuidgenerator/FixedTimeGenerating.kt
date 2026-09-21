@@ -21,5 +21,5 @@ interface FixedTimeGenerating {
     }
 
     fun toInstant(time: LocalDateTime): Instant =
-        time.toInstant(ZoneOffset.systemDefault().rules.getOffset(LocalDateTime.now()))
+        time.atZone(java.time.ZoneId.systemDefault()).toInstant()
 }
