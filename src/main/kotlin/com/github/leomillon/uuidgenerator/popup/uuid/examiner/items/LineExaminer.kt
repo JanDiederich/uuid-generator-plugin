@@ -288,11 +288,11 @@ private fun findColumnMaximums(examinedLines: List<ExaminationResult>): List<Spl
     // First column is always just the plain text-source.
     splitInfos.add(SplitInfo())
 
-    for (examinedLine in examinedLines) {
-        if (examinedLine.uuidList?.isNotEmpty() == true) {
+    for ((_, _, uuidList) in examinedLines) {
+        if (uuidList?.isNotEmpty() == true) {
             // = 1 because the 1st column is always added as the source.
             var splitInfoIndex = 1
-            for ((splitSegmentIndex, uuidInfos) in examinedLine.uuidList.withIndex()) {
+            for ((splitSegmentIndex, uuidInfos) in uuidList.withIndex()) {
                 var size = 0
                 if (uuidInfos.infos?.isNotEmpty() == true) {
                     val uuidColumnCount = mutableListOf<ColumnCount>()
