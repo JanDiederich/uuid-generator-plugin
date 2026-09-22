@@ -1,7 +1,6 @@
 package com.github.leomillon.uuidgenerator.popup
 
 import com.intellij.openapi.ui.DialogWrapper
-import javax.swing.AbstractAction
 import javax.swing.Action
 
 abstract class GeneratePopup : DialogWrapper(true), IGeneratePopup {

@@ -80,6 +80,7 @@ class IDAnnotatorTest : BasePlatformTestCase() {
         myFixture.configureByText(JavaFileType.INSTANCE, code)
         PsiDocumentManager.getInstance(project).commitAllDocuments()
 
+        val oldTimeZone = TimeZone.getDefault()
         /* Set a timezone for the UUIDv7 localized time string
         - to make the test run everywhere, regardless of the test-systems set timezone. */
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Berlin"))
@@ -97,6 +98,8 @@ class IDAnnotatorTest : BasePlatformTestCase() {
         assertUUIDCount(highlightingResult, 7, 1)
         assertULIDCount(highlightingResult, 1)
         assertCUIDCount(highlightingResult, 1)
+
+        TimeZone.setDefault(oldTimeZone)
     }
 
     fun `test should annotate UUIDs, ULIDs and CUIDs in Kotlin code`() {

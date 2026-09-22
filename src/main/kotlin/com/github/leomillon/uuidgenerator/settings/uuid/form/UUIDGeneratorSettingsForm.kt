@@ -102,7 +102,7 @@ class UUIDGeneratorSettingsForm : UUIDGeneratorBaseForm {
         settings.codeHighlighting = codeHighlightingEnabled() ?: true
         settings.debuggerInsight = debuggerInsightEnabled() ?: true
         settings.fixedTime = isFixedTime()
-        settings.uuidCreationTime = uuidCreationTime()
+        settings.uuidCreationTime = fetchUuidCreationTime()
     }
 
     fun component(): JComponent? = panel
@@ -118,6 +118,6 @@ class UUIDGeneratorSettingsForm : UUIDGeneratorBaseForm {
                 || codeHighlightingEnabled() != settings.codeHighlighting
                 || debuggerInsightEnabled() != settings.debuggerInsight
                 || isFixedTime() != settings.fixedTime
-                || uuidCreationTime() != settings.uuidCreationTime
+                || fetchUuidCreationTime() != settings.uuidCreationTime
                 )
 }

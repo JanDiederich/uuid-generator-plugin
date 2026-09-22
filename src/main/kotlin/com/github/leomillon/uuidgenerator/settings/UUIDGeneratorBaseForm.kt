@@ -53,5 +53,5 @@ interface UUIDGeneratorBaseForm : FixedTimeGenerating {
     }
 
     fun isFixedTime(): Boolean = fixedTimeRadioButton?.isSelected ?: false
-    override fun uuidCreationTime(): LocalDateTime? = timePicker?.dateTimePermissive
+    override fun fetchUuidCreationTime(): LocalDateTime? = timePicker?.dateTimePermissive
 }

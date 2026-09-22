@@ -51,5 +51,5 @@ class UUIDGeneratorSettings : PersistentStateComponent<UUIDGeneratorSettings>,
 
     override fun isLongSize() = longSize
 
-    override fun uuidCreationTime() = uuidCreationTime
+    override fun fetchUuidCreationTime() = uuidCreationTime
 }
