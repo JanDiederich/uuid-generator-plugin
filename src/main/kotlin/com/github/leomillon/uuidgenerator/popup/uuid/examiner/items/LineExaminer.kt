@@ -3,6 +3,7 @@ package com.github.leomillon.uuidgenerator.popup.uuid.examiner.items
 import com.github.f4b6a3.uuid.util.UuidUtil
 import com.github.leomillon.uuidgenerator.parser.findUUIDs
 import com.github.leomillon.uuidgenerator.popup.uuid.summarizeString
+import com.intellij.openapi.util.text.StringUtil.escapeXmlEntities
 import com.univocity.parsers.csv.CsvParser
 import com.univocity.parsers.csv.CsvParserSettings
 import org.intellij.lang.annotations.Language
@@ -195,10 +196,10 @@ $htmlHead
         } else {
             examinationResults
         }
-        for (row in results) {
+        for ((_, cells) in results) {
             sb.appendLine("    <tr>")
-            for (cell in row.cells) {
-                sb.appendLine("      <td>${cell.value ?: ""}</td>")
+            for ((_, value) in cells) {
+                sb.appendLine("      <td>${escapeXmlEntities(value?.toString() ?: "")}</td>")
             }
             sb.appendLine("    </tr>")
         }
@@ -360,33 +361,32 @@ private fun buildCellInfos(
         for (splitInfoIndex in 1..<splitInfos.size) {
             val splitInfo = splitInfos[splitInfoIndex]
             if (splitInfo.itemType != ItemType.Text) {
+                val rowUuidInfos = examinedLine.uuidListEntry(uuidInfoSegmentIndex)
+
                 for ((splitInfoColumnIndex, uuidColumns) in splitInfo.columnCounts?.withIndex() ?: emptyList()) {
-                    if (examinedLine.uuidList?.isNotEmpty() == true && examinedLine.uuidListEntry(uuidInfoSegmentIndex) != null) {
-                        val uuidInfos: UuidInfos = examinedLine.uuidListEntry(uuidInfoSegmentIndex)!!
-                        if (uuidInfos.infos?.isNotEmpty() == true && splitInfoColumnIndex < uuidInfos.infos.size) {
-                            val uuidInfo = uuidInfos.infos[splitInfoColumnIndex]
-                            cells.add(CellInfo(ColumnType.Uuid, uuidInfo.uuid))
-                            cells.add(CellInfo(ColumnType.Version, uuidInfo.uuid.version()))
-                            if (uuidInfo.timestamp != null) {
-                                // If max columns reached, this must be identical.
-                                if (uuidColumns.columnCount != uuidInfo.columnCount) {
-                                    throw IllegalStateException(
-                                        "Inconsistent column count for split index $splitInfoIndex, column index $splitInfoColumnIndex"
-                                    )
-                                }
-                                cells.add(CellInfo(ColumnType.Timestamp, uuidInfo.timestamp))
-                            } else if (uuidColumns.columnCount >= 3) {
-                                cells.add(CellInfo(ColumnType.Timestamp, null))
+                    if (rowUuidInfos != null && rowUuidInfos.infos?.isNotEmpty() == true && splitInfoColumnIndex < rowUuidInfos.infos.size) {
+                        val uuidInfo = rowUuidInfos.infos[splitInfoColumnIndex]
+                        cells.add(CellInfo(ColumnType.Uuid, uuidInfo.uuid))
+                        cells.add(CellInfo(ColumnType.Version, uuidInfo.uuid.version()))
+                        if (uuidInfo.timestamp != null) {
+                            // If max columns reached, this must be identical.
+                            require (uuidColumns.columnCount == uuidInfo.columnCount) {
+                                throw IllegalStateException(
+                                    "Inconsistent column count for split index $splitInfoIndex, column index $splitInfoColumnIndex"
+                                )
                             }
-                        } else {
-                            // No data in this line, fill up with empty cells.
-                            addCellInfos(cells, uuidColumns)
+                            cells.add(CellInfo(ColumnType.Timestamp, uuidInfo.timestamp))
+                        } else if (uuidColumns.columnCount >= 3) {
+                            cells.add(CellInfo(ColumnType.Timestamp, null))
                         }
-                        uuidInfoSegmentIndex++
                     } else {
                         // No data in this line, fill up with empty cells.
                         addCellInfos(cells, uuidColumns)
                     }
+                }
+
+                if (rowUuidInfos != null) {
+                    uuidInfoSegmentIndex++
                 }
             }
         }
@@ -504,7 +504,7 @@ fun convertInputToTableLines(
     }
     val examinedLines = lines
         .map { line -> examineLine(line.trim(), format) }
-    val splitInfos = findColumnMaximums(examinedLines)
+    val splitInfos: List<SplitInfo> = findColumnMaximums(examinedLines)
 
     buildCellInfos(examinedLines, splitInfos, summarizeSource)
     val headerInfo = buildHeaderInfo(

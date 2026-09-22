@@ -94,6 +94,7 @@
                 </constraints>
                 <properties>
                   <text value=","/>
+                  <toolTipText value="Supports more than 1 char wide separator"/>
                 </properties>
               </component>
               <component id="43ec" class="javax.swing.JCheckBox" binding="trimWhitespaceCheck">
@@ -131,6 +132,7 @@
                 <properties>
                   <selected value="true"/>
                   <text value="Summarize source"/>
+                  <toolTipText value="Shortens the &quot;Source&quot; column text to &quot;Prefix...Suffix&quot;"/>
                 </properties>
               </component>
               <component id="b40ff" class="javax.swing.JCheckBox" binding="headerSeparatorCheck">
@@ -140,6 +142,7 @@
                 <properties>
                   <selected value="true"/>
                   <text value="Has header separator"/>
+                  <toolTipText value="Has separator line between header and data"/>
                 </properties>
               </component>
             </children>

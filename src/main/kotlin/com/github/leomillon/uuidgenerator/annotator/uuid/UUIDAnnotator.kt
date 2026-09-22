@@ -74,7 +74,7 @@ private fun highlightInText(
             .enforcedTextAttributes(DefaultLanguageHighlighterColors.CONSTANT.defaultAttributes)
 
         if (uuidVersion == 7) {
-            /* While the menu entries sre always sorted alphabetically,
+            /* While the menu entries are always sorted alphabetically,
             put this first to signal IntelliJ that this should be available as tooltip quickfix. */
             annotationBuilder
                 .withFix(UUIDv7RandomQuickFix(textRange))

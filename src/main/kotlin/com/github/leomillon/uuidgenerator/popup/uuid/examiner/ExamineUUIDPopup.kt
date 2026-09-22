@@ -20,7 +20,7 @@ class ExamineUUIDPopup : GeneratePopup() {
 
     init {
         init()
-        title = "UUID examiner Popup"
+        title = "UUID Examiner Popup"
     }
 
     override fun createActions(): Array<Action> {

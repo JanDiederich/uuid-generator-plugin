@@ -3,7 +3,6 @@ package com.github.leomillon.uuidgenerator
 import com.github.f4b6a3.uuid.UuidCreator
 import com.github.leomillon.uuidgenerator.settings.uuid.UUIDFormatSettings
 import com.github.leomillon.uuidgenerator.settings.uuid.UUIDGeneratorSettings
-import java.time.LocalDateTime
 import java.util.*
 
 object UUIDGenerator {

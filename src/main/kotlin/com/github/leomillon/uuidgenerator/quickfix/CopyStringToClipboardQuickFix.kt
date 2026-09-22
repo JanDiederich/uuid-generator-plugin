@@ -6,6 +6,7 @@ import com.intellij.codeInsight.intention.preview.IntentionPreviewInfo
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.ide.CopyPasteManager
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.text.StringUtil.escapeXmlEntities
 import com.intellij.psi.PsiFile
 import com.intellij.util.ui.TextTransferable
 
@@ -29,6 +30,6 @@ class CopyStringToClipboardQuickFix(
         editor: Editor,
         psiFile: PsiFile
     ): IntentionPreviewInfo {
-        return IntentionPreviewInfo.Html("<p>${com.intellij.openapi.util.text.StringUtil.escapeXmlEntities(source)}</p>")
+        return IntentionPreviewInfo.Html("<p>${escapeXmlEntities(source)}</p>")
     }
 }

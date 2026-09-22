@@ -230,6 +230,36 @@ class UUIDExaminerTest {
         }
     }
 
+    @Test
+    fun `a single segment with more UUIDs keeps all columns aligned`() {
+        val firstLine = "$uuidV4 $uuidV4_2"
+        val secondLine = uuidV4
+
+        val buildResult = convertInputToTableLines(
+            listOf(firstLine, secondLine).joinToString("\n"),
+            null,
+            trimWhitespace = true,
+            hasHeader = false,
+            hasHeaderSeparator = false,
+            summarizeSource = true
+        )
+
+        assertThat(buildResult.examinationResults[0].cells).isEqualTo(listOf(
+            CellInfo(ColumnType.String, summarizeString(firstLine)),
+            CellInfo(ColumnType.Uuid, UUID.fromString(uuidV4)),
+            CellInfo(ColumnType.Version, 4),
+            CellInfo(ColumnType.Uuid, UUID.fromString(uuidV4_2)),
+            CellInfo(ColumnType.Version, 4),
+        ))
+        assertThat(buildResult.examinationResults[1].cells).isEqualTo(listOf(
+            CellInfo(ColumnType.String, summarizeString(secondLine)),
+            CellInfo(ColumnType.Uuid, UUID.fromString(uuidV4)),
+            CellInfo(ColumnType.Version, 4),
+            CellInfo(ColumnType.Uuid, null),
+            CellInfo(ColumnType.Version, null),
+        ))
+    }
+
     // For manually testing, if the IntelliJ debugger live evaluation works.
     @Test
     fun testUuidDebugging() {

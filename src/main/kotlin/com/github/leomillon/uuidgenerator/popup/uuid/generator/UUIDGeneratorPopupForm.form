@@ -322,11 +322,9 @@
     </group>
     <group name="versionRadioGroup">
       <member id="4e816"/>
-      <member id="4e816"/>
       <member id="f40a4"/>
     </group>
     <group name="fixedTimeGroup">
-      <member id="b86c0"/>
       <member id="b86c0"/>
       <member id="3699"/>
     </group>
