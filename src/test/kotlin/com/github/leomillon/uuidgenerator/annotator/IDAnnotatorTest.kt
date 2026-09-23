@@ -84,22 +84,23 @@ class IDAnnotatorTest : BasePlatformTestCase() {
         /* Set a timezone for the UUIDv7 localized time string
         - to make the test run everywhere, regardless of the test-systems set timezone. */
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Berlin"))
+        try {
+            // When
+            val highlightingResult = myFixture.doHighlighting()
 
-        // When
-        val highlightingResult = myFixture.doHighlighting()
-
-        // Then
-        assertThat(highlightingResult).isNotEmpty()
-        assertUUIDv4Highlight(highlightingResult, 112, 148)
-        assertUUIDv7Highlight(highlightingResult, 202, 238)
-        assertULIDHighlight(highlightingResult, 290, 316)
-        assertCUIDHighlight(highlightingResult, 368, 393)
-        assertUUIDCount(highlightingResult, 4, 1)
-        assertUUIDCount(highlightingResult, 7, 1)
-        assertULIDCount(highlightingResult, 1)
-        assertCUIDCount(highlightingResult, 1)
-
-        TimeZone.setDefault(oldTimeZone)
+            // Then
+            assertThat(highlightingResult).isNotEmpty()
+            assertUUIDv4Highlight(highlightingResult, 112, 148)
+            assertUUIDv7Highlight(highlightingResult, 202, 238)
+            assertULIDHighlight(highlightingResult, 290, 316)
+            assertCUIDHighlight(highlightingResult, 368, 393)
+            assertUUIDCount(highlightingResult, 4, 1)
+            assertUUIDCount(highlightingResult, 7, 1)
+            assertULIDCount(highlightingResult, 1)
+            assertCUIDCount(highlightingResult, 1)
+        } finally {
+            TimeZone.setDefault(oldTimeZone)
+        }
     }
 
     fun `test should annotate UUIDs, ULIDs and CUIDs in Kotlin code`() {

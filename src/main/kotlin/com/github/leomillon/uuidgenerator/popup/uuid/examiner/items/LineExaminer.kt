@@ -100,7 +100,7 @@ data class BuildResult(val examinationResults: List<ExaminationResult>, val head
     /**
      * Render a Markdown formatted table of this objects content.
      *
-     * The header comes only from [headerInfo.singleTitles], [HeaderInfo.headerGroupTitles]
+     * The header comes only from [HeaderInfo.singleTitles], [HeaderInfo.headerGroupTitles]
      * is completely ignored, because Markdown can't handle 2-row tables.
      */
     fun convertToMarkdown(): String {
@@ -130,18 +130,18 @@ data class BuildResult(val examinationResults: List<ExaminationResult>, val head
     /**
      * Render a HTML formatted table of this objects content.
      *
-     * If [headerInfo.headerGroupTitles] is not null it draws a two-rows header, the following way:
+     * If [HeaderInfo.headerGroupTitles] is not null it draws a two-rows header, the following way:
      * - The 1st row with captions, which span a multi-column area for each entry of
-     *      [headerInfo.headerGroupTitles], where the entry spans from column
+     *      [HeaderInfo.headerGroupTitles], where the entry spans from column
      *      [HeaderGroupTitle.start] (inclusive) to [HeaderGroupTitle.stop] (exclusive),
      *      and the title is [HeaderGroupTitle.title].
      * - The 2nd row are normal single column captions from [HeaderInfo.singleTitles]
      *
-     * If [headerInfo.headerGroupTitles] is null only the normal single column captions
+     * If [HeaderInfo.headerGroupTitles] is null only the normal single column captions
      * from [HeaderInfo.singleTitles] are shown.
      *
      * The table content is from [examinationResults] (1st line is skipped
-     * if [headerInfo.headerGroupTitles] is != null).
+     * if [HeaderInfo.headerGroupTitles] is != null).
      */
     fun convertToHtml(): String {
         val sb = StringBuilder()
