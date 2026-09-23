@@ -30,8 +30,6 @@ interface UUIDGeneratorBaseForm : FixedTimeGenerating {
     fun isLowerCased() = lowerCaseRadioButton?.isSelected
     fun isWithDashes() = withDashesRadioButton?.isSelected
     fun isLongSize() = longSizeRadioButton?.isSelected
-    fun isVersion4() = uuidV4RadioButton?.isSelected
-    fun isVersion7() = uuidV7RadioButton?.isSelected
 
     fun isUuid7TimeComponent(uiComponent: ItemSelectable): Boolean = (uiComponent == uuidV4RadioButton
             || uiComponent == uuidV7RadioButton

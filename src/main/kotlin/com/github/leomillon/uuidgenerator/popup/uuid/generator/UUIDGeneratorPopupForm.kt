@@ -90,7 +90,7 @@ class UUIDGeneratorPopupForm : UUIDGeneratorBaseForm {
             }
         // Time spinners.
         timePicker?.addDateTimeChangeListener {
-            if (isVersion7() == true && isFixedTime()) {
+            if (isUuidVersion7() && isFixedTime()) {
                 updateIds()
                 updatePreview()
             }
@@ -160,7 +160,7 @@ class UUIDGeneratorPopupForm : UUIDGeneratorBaseForm {
     }
 
     private fun createRandomUuidBasedOnSettings(): UUID {
-        return if (isVersion4() ?: true) {
+        return if (isUuidVersion4() ?: true) {
             UuidCreator.getRandomBased()
         } else {
             if (isFixedTime()) {
@@ -180,7 +180,7 @@ class UUIDGeneratorPopupForm : UUIDGeneratorBaseForm {
     }
 
     fun applyToSettings(settings: UUIDGeneratorPopupSettings) {
-        settings.uuidVersion4 = isVersion4() ?: true
+        settings.uuidVersion4 = isUuidVersion4() ?: true
         settings.lowerCased = isLowerCased() ?: true
         settings.withDashes = isWithDashes() ?: true
         settings.longSize = isLongSize() ?: true

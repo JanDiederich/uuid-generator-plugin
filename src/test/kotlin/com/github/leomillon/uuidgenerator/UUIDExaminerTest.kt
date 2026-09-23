@@ -5,7 +5,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.github.leomillon.uuidgenerator.popup.uuid.examiner.items.*
 import com.github.leomillon.uuidgenerator.popup.uuid.examiner.summarizeString
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.Instant
