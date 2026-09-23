@@ -13,7 +13,6 @@ data class UuidInfo(
      *  1. UUID
      *  2. Version
      *  3. Timestamp (if available)
-     * </ul>
      */
     val columnCount: Int = if (timestamp != null) 3 else 2
 

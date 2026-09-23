@@ -1,0 +1,29 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <debugger.nodeRenderer implementation="com.github.leomillon.uuidgenerator.debugger.UuidNodeRenderer"/>
+
+        <!-- "language" can't be left empty to mean "all languages". -->
+        <!-- Disabled by default to save resources. -->
+        <codeInsight.declarativeInlayProvider
+                language="JAVA"
+                implementationClass="com.github.leomillon.uuidgenerator.inlay.UuidInlayProvider"
+                isEnabledByDefault="false"
+                group="OTHER_GROUP"
+                providerId="uuid-debug-inlays-java"
+                bundle="messages.UuidGeneratorBundle"
+                nameKey="uuid.debug.inlay"
+                descriptionKey="uuid.debug.inlay.description"/>
+
+        <!-- "language" can't be left empty to mean "all languages". -->
+        <!-- Disabled by default to save resources. -->
+        <codeInsight.declarativeInlayProvider
+                language="kotlin"
+                implementationClass="com.github.leomillon.uuidgenerator.inlay.UuidInlayProvider"
+                isEnabledByDefault="false"
+                group="OTHER_GROUP"
+                providerId="uuid-debug-inlays-kotlin"
+                bundle="messages.UuidGeneratorBundle"
+                nameKey="uuid.debug.inlay"
+                descriptionKey="uuid.debug.inlay.description"/>
+    </extensions>
+</idea-plugin>

@@ -36,20 +36,20 @@ object EditorDocumentUtils {
 
     fun replaceTextAtRange(editor: Editor, range: TextRange, text: CharSequence) {
         require (range.startOffset <= editor.document.textLength) {
-            throw IllegalArgumentException("Start offset ${range.startOffset} is greater than document length ${editor.document.textLength}")
+            "Start offset ${range.startOffset} is greater than document length ${editor.document.textLength}"
         }
         require(range.endOffset <= editor.document.textLength) {
-            throw IllegalArgumentException("End offset ${range.endOffset} is greater than document length ${editor.document.textLength}")
+            "End offset ${range.endOffset} is greater than document length ${editor.document.textLength}"
         }
         editor.document.replaceString(range.startOffset, range.endOffset, text)
     }
 
     fun replaceTextAtRange(editor: Editor, rangeMarker: RangeMarker, text: CharSequence) {
         require(rangeMarker.startOffset <= editor.document.textLength) {
-            throw IllegalArgumentException("Start offset ${rangeMarker.startOffset} is greater than document length ${editor.document.textLength}")
+            "Start offset ${rangeMarker.startOffset} is greater than document length ${editor.document.textLength}"
         }
         require(rangeMarker.endOffset <= editor.document.textLength) {
-            throw IllegalArgumentException("End offset ${rangeMarker.endOffset} is greater than document length ${editor.document.textLength}")
+            "End offset ${rangeMarker.endOffset} is greater than document length ${editor.document.textLength}"
         }
         editor.document.replaceString(rangeMarker.startOffset, rangeMarker.endOffset, text)
     }

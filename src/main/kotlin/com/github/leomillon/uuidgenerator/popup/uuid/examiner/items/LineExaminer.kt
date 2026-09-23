@@ -370,10 +370,8 @@ private fun buildCellInfos(
                         cells.add(CellInfo(ColumnType.Version, uuidInfo.uuid.version()))
                         if (uuidInfo.timestamp != null) {
                             // If max columns reached, this must be identical.
-                            require (uuidColumns.columnCount == uuidInfo.columnCount) {
-                                throw IllegalStateException(
-                                    "Inconsistent column count for split index $splitInfoIndex, column index $splitInfoColumnIndex"
-                                )
+                            require(uuidColumns.columnCount == uuidInfo.columnCount) {
+                                "Inconsistent column count for split index $splitInfoIndex, column index $splitInfoColumnIndex"
                             }
                             cells.add(CellInfo(ColumnType.Timestamp, uuidInfo.timestamp))
                         } else if (uuidColumns.columnCount >= 3) {

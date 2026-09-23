@@ -24,13 +24,13 @@ private fun defaultHeaderLabel(text: String): JLabel {
 /**
  * Draws a custom `JTable` header.
  *
- * If [headerInfo.headerTitles] is not null it draws a two-rows header, the following way:
+ * If [HeaderInfo.headerGroupTitles] is not null it draws a two-rows header, the following way:
  * - The 1st row with captions, which span a multi-column area for each entry of `headerTitles`,
- *      where the entry spans from column [HeaderTitle.start] (inclusive)
- *      to [HeaderTitle.stop] (exclusive), and the title is [HeaderTitle.title].
+ *      where the entry spans from column [HeaderGroupTitle.start] (inclusive)
+ *      to [HeaderGroupTitle.stop] (exclusive), and the title is [HeaderGroupTitle.title].
  * - The 2nd row are normal single column captions from [HeaderInfo.singleTitles]
  *
- * If [headerInfo.headerTitles] is null only the normal single column captions
+ * If [HeaderInfo.headerGroupTitles] is null only the normal single column captions
  * from [HeaderInfo.singleTitles] are shown.
  */
 class CustomHeaderRenderer(var headerInfo: HeaderInfo) : DefaultTableCellRenderer() {
