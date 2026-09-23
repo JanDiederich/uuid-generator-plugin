@@ -3,10 +3,14 @@ package com.github.leomillon.uuidgenerator
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.matches
+import com.github.f4b6a3.uuid.util.UuidUtil
 import com.github.leomillon.uuidgenerator.settings.uuid.UUIDGeneratorSettings
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 class UUIDGeneratorTest {
@@ -120,5 +124,18 @@ class UUIDGeneratorTest {
     ) {
         assertThat(UUIDGenerator.generateUUIDv4(settings))
             .matches(expectedIdRegex)
+    }
+
+    @Test
+    fun `should generate uuid v7 using the configured timestamp`() {
+        val settings = UUIDGeneratorSettings()
+        settings.fixedTime = true
+        settings.uuidCreationTime = LocalDateTime.of(2024, 1, 2, 3, 4, 5, 123_000_000)
+
+        val generatedUuid = UUID.fromString(UUIDGenerator.generateUUIDv7(settings))
+        val expectedInstant = settings.uuidCreationTime!!.atZone(ZoneId.systemDefault()).toInstant()
+
+        assertThat(generatedUuid.version()).isEqualTo(7)
+        assertThat(UuidUtil.getInstant(generatedUuid)).isEqualTo(expectedInstant)
     }
 }

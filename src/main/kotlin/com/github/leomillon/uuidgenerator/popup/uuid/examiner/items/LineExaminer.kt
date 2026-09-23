@@ -2,7 +2,7 @@ package com.github.leomillon.uuidgenerator.popup.uuid.examiner.items
 
 import com.github.f4b6a3.uuid.util.UuidUtil
 import com.github.leomillon.uuidgenerator.parser.findUUIDs
-import com.github.leomillon.uuidgenerator.popup.uuid.summarizeString
+import com.github.leomillon.uuidgenerator.popup.uuid.examiner.summarizeString
 import com.intellij.openapi.util.text.StringUtil.escapeXmlEntities
 import com.univocity.parsers.csv.CsvParser
 import com.univocity.parsers.csv.CsvParserSettings
@@ -167,9 +167,9 @@ $htmlHead
                 }
                 val span = group.stop - group.start
                 if (span > 1) {
-                    sb.appendLine("      <th colspan=\"$span\">${group.title}</th>")
+                    sb.appendLine("      <th colspan=\"$span\">${escapeXmlEntities(group.title)}</th>")
                 } else {
-                    sb.appendLine("      <th>${group.title}</th>")
+                    sb.appendLine("      <th>${escapeXmlEntities(group.title)}</th>")
                 }
                 col = group.stop
             }

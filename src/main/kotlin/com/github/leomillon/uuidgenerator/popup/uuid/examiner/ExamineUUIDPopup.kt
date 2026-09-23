@@ -2,9 +2,7 @@ package com.github.leomillon.uuidgenerator.popup.uuid.examiner
 
 import com.github.leomillon.uuidgenerator.DisplayMessageUtils
 import com.github.leomillon.uuidgenerator.popup.GeneratePopup
-import com.github.leomillon.uuidgenerator.popup.uuid.UUIDExaminerPopupForm
 import com.intellij.ide.DataManager
-import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.ide.CopyPasteManager
 import com.intellij.openapi.project.Project

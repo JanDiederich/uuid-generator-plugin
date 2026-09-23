@@ -1,8 +1,6 @@
-package com.github.leomillon.uuidgenerator.popup.uuid
+package com.github.leomillon.uuidgenerator.popup.uuid.examiner
 
 import com.github.leomillon.uuidgenerator.parser.findUUIDs
-import com.github.leomillon.uuidgenerator.popup.uuid.examiner.CustomHeaderRenderer
-import com.github.leomillon.uuidgenerator.popup.uuid.examiner.UUIDExaminerPopupSettings
 import com.github.leomillon.uuidgenerator.popup.uuid.examiner.items.BuildResult
 import com.github.leomillon.uuidgenerator.popup.uuid.examiner.items.ExaminationResult
 import com.github.leomillon.uuidgenerator.popup.uuid.examiner.items.HeaderInfo
@@ -24,7 +22,6 @@ import javax.swing.table.TableModel
 import javax.swing.text.JTextComponent
 import javax.swing.text.SimpleAttributeSet
 import javax.swing.text.StyleConstants
-
 
 /** Maximum width of auto-sizing first column with the source. */
 private const val SourceColumnMaxWidth = 200
