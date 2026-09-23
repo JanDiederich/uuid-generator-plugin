@@ -1,7 +1,6 @@
 package com.github.leomillon.uuidgenerator.popup.uuid.generator
 
 import com.github.leomillon.uuidgenerator.popup.GeneratePopup
-import com.github.leomillon.uuidgenerator.popup.uuid.UUIDGeneratorPopupForm
 import javax.swing.JComponent
 
 class GenerateUUIDPopup : GeneratePopup() {
@@ -10,7 +9,7 @@ class GenerateUUIDPopup : GeneratePopup() {
 
     init {
         init()
-        title = "UUID v4 & v7 generator Popup"
+        title = "UUID V4 & V7 Generator Popup"
     }
 
     override fun createCenterPanel(): JComponent? {

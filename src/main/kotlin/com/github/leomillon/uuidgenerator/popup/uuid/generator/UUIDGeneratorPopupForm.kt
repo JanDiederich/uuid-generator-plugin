@@ -1,8 +1,7 @@
-package com.github.leomillon.uuidgenerator.popup.uuid
+package com.github.leomillon.uuidgenerator.popup.uuid.generator
 
 import com.github.f4b6a3.uuid.UuidCreator
 import com.github.leomillon.uuidgenerator.UUIDGenerator
-import com.github.leomillon.uuidgenerator.popup.uuid.generator.UUIDGeneratorPopupSettings
 import com.github.leomillon.uuidgenerator.settings.UUIDGeneratorBaseForm
 import com.github.lgooddatepicker.components.DateTimePicker
 import java.awt.ItemSelectable
