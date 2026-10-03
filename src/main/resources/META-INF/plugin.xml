@@ -17,7 +17,9 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!--UUID-->
-        <applicationConfigurable instance="com.github.leomillon.uuidgenerator.settings.uuid.UUIDGeneratorConfigurable"/>
+        <applicationConfigurable
+                instance="com.github.leomillon.uuidgenerator.settings.uuid.UUIDGeneratorConfigurable"
+                displayName="UUID Generator"/>
 
         <applicationService
                 serviceImplementation="com.github.leomillon.uuidgenerator.settings.uuid.UUIDGeneratorSettings"/>
@@ -29,7 +31,9 @@
                 serviceImplementation="com.github.leomillon.uuidgenerator.popup.uuid.examiner.UUIDExaminerPopupSettings"/>
 
         <!--ULID-->
-        <applicationConfigurable instance="com.github.leomillon.uuidgenerator.settings.ulid.ULIDGeneratorConfigurable"/>
+        <applicationConfigurable
+                instance="com.github.leomillon.uuidgenerator.settings.ulid.ULIDGeneratorConfigurable"
+                displayName="ULID Generator"/>
 
         <applicationService
                 serviceImplementation="com.github.leomillon.uuidgenerator.settings.ulid.ULIDGeneratorSettings"/>
@@ -38,7 +42,9 @@
                 serviceImplementation="com.github.leomillon.uuidgenerator.popup.ulid.ULIDGeneratorPopupSettings"/>
 
         <!--CUID-->
-        <applicationConfigurable instance="com.github.leomillon.uuidgenerator.settings.cuid.CUIDGeneratorConfigurable"/>
+        <applicationConfigurable
+                instance="com.github.leomillon.uuidgenerator.settings.cuid.CUIDGeneratorConfigurable"
+                displayName="CUID Generator"/>
 
         <applicationService
                 serviceImplementation="com.github.leomillon.uuidgenerator.settings.cuid.CUIDGeneratorSettings"/>
